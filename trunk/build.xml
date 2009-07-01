@@ -1,0 +1,22 @@
+<project name="gambler" default="default">
+	<target name="default"> 
+		<ant dir="bayes"/> 
+		<ant dir="Gambler"/>
+	</target>
+	<target name="compile">
+		<ant dir="bayes"   target="compile" />
+		<ant dir="Gambler" target="compile"/>
+	</target>	
+	<target name="doc">
+		<ant dir="bayes"   target="doc" />
+		<ant dir="Gambler" target="doc"/>
+	</target>	
+	<target name="test">
+		<ant dir="bayes"   target="test" />
+		<ant dir="Gambler" target="test"/>
+	</target>	
+	<target name="all">
+		<ant dir="bayes"   target="all" />
+		<ant dir="Gambler" target="all"/>
+	</target>
+</project>

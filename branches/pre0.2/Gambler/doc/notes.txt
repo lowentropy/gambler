@@ -1,0 +1,47 @@
+use remote desktop software (any commercial VNC server software)
+modify a VNC client to take scripted commands from a poker backend
+which contains a model of the game. use an event callbacks into the
+game model. the "player turn" callback triggers the controller to
+analyze the game model and decide on an action, which is a list of
+action types and parameters passed back as an event to the VNC
+client.
+
+the client has a thread for each poker game, each of which polls the
+VNC controller for its window contents, and sends events to the game
+model.
+
+the VNC controller manages connection to the server, manages setup
+VNC commands for different poker systems, makes sure all poker game
+clients can poll their respective windows with real-time frequency,
+and handles ordering of mouse movements among the many windows
+
+
+----------
+
+3 components:
+
+1) Game Model (Server)
+2) VNC Controller (Client)
+	2.1) Poker Dispatcher (Event-Model)
+	
+When the VNC Controller recieves a frame buffer update from
+one of the vnc servers, it updates the pixels and invokes
+the dispatcher by telling it that given regions were updated.
+the dispatcher then checks near regions to known 'trigger areas',
+which are things like text recognizers, text status
+notifiers, or custom trigger regions, which individually
+determine what action to take.
+	text recognizer: parses text
+		if different, invokes textChanged(newtext)
+		if invalid (not text), invokes textDisappeared()
+		if valid after invalid, invokes textReappeared(newtext)
+	text status notifier: looks for occurence of text
+		if present after not present: statusChanged(true)
+		if not present anfter present: statusChanged(false)
+	custom trigger regions:
+		custom condition: stateChanged(data)
+the listeners on these events may do partial internal
+processing (to complete the set of variables dealt with by
+the game server) and then make appropriate calls to the game
+server to notify it of events (variable changes) or to ask for
+input

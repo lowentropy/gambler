@@ -1,0 +1,30 @@
+<applet code="Poker4Applet" width="681" height="455" archive="pokerClient42_1281.jar,playernotes.jar" >
+	<param name="res-archive" value="Poker.res">
+	<param name="table-res-archive" value="PokerTable.res">
+	<param name="res-language" value="Language.res">
+	<param name="playernotes-res-archive-win" value="win-playernotes.res">
+	<param name="playernotes-res-archive-mac" value="Mac-playernotes.res">
+	<param name="playernotes-res-archive-linux" value="linux-playernotes.res">
+	<param name="id" value="5739669">
+	<param name="p4key0" value="-685551910">
+	<param name="p4key1" value="1344061763">
+	<param name="p4key2" value="255562080">
+	<param name="p4key3" value="846886032">
+	<param name="p4port" value="5710">
+	<param name="t4key0" value="-2044793930">
+	<param name="t4key1" value="1436677039">
+	<param name="t4key2" value="980626532">
+	<param name="t4key3" value="1129563814">
+	<param name="t4port" value="5750">
+	<param name="st4port" value="5756,5757,5758">
+	<param name="tournamentURL" value="http://www.pokerroom.com/games/tournament/?id=">
+	<param name="prevHandURL" value="http://www.pokerroom.com/games/handhistory/handHistoryResult.php?handNumber={0}&amp;gameCode=P4">
+	<param name="depositPageURL" value="https://www.pokerroom.com/cashier/deposit/">
+	<param name="oobapi" value="/api/client/">
+	<param name="siteName" value="www.pokerroom.com">
+	<param name="isRealMoney" value="false">
+	<param name="teamPageURL" value="https://www.pokerroom.com/api/remoteclient/teamFinder.php?teamName=">
+	<param name="gameFormat" value="p4">
+	<param name="gameType" value="TexasHoldem">
+	
+</applet>

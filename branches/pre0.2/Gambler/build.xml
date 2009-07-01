@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<!-- ====================================================================== 
+     Jun 3, 2006 4:39:33 AM                                                        
+
+     Gambler    
+     Play poker, win, get rich!
+                   
+     josephholsten                                                                
+     ====================================================================== -->
+<project name="Gambler" default="all">
+    <description>
+            Play poker, win, get rich!
+    </description>
+	
+	<property name="src_dir" value="poker"/>
+	<property name="test_dir" location="${src_dir}/unit:${src_dir}/util/xml/test"/>
+	<property name="build_dir" value="bin"/>
+	<property name="classes_dir" value="${build_dir}"/>
+	<property name="jar_dir" value="${build_dir}"/>
+	<property name="junit_path" location="/Users/josephholsten/Desktop/eclipse/plugins/org.junit_3.8.1/junit.jar"/>
+
+	<path id="classpath">
+		<pathelement location="${jar_dir}"/>
+	  	<pathelement location="../bayes/bin"/>
+	    <pathelement location="ext/meerkat-api.jar"/>
+	  	<pathelement location="${junit_path}"/>
+	    <pathelement location="ext/jdom.jar"/>
+	  	<pathelement location="ext"/>
+	</path>
+    <!-- ================================= 
+          target: all              
+         ================================= -->
+    <target name="all" depends="clean, prepare, compile, compile-rmi, archive" description="--> Play poker, win, get rich!" />
+	
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: prepare                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="prepare">
+		<mkdir dir="${build_dir}"/>
+    		<mkdir dir="${classes_dir}"/>
+    		<mkdir dir="${jar_dir}"/>
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: compile                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="compile" depends="prepare">
+    		<javac srcdir="${src_dir}" destdir="${classes_dir}">
+    			<classpath refid="classpath" />
+    		</javac>
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: compile-rmi                    
+      - - - - - - - - - - - - - - - - - -->
+	<target name="compile-rmi" depends="compile">
+		<rmic base="${build_dir}" includes="poker/server/base/impl/StatePlayer.class, poker/server/cluster/ClusterServerImpl.class, poker/server/log/LogServerImpl.class, poker/server/session/SessionServerImpl.class">
+			<classpath refid="classpath"/>
+		</rmic>
+	</target>
+	
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: archive                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="archive" depends="prepare, compile, compile-rmi">
+		<jar destfile="${jar_dir}/${ant.project.name}.jar" basedir="${classes_dir}"/>
+	</target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: test_compile              
+         - - - - - - - - - - - - - - - - - -->
+    <target name="test_compile" depends="compile">
+	    <javac
+	    		srcdir="${test_dir}"
+    			destdir="${classes_dir}"
+	    		classpath="${junit_path}" 
+			failonerror="true"/>
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: test                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="test" depends="test_compile">
+    		<junit
+			errorProperty="test.failed"
+			failureProperty="test.failed">
+    			<classpath refid="classpath"/>
+    			<formatter type="brief" usefile="false"/>
+			<formatter type="xml"/>
+    			<batchtest>
+    				<fileset dir="${classes_dir}" includes="**/*Test.class"/>
+    			</batchtest>
+    		</junit>	
+			<fail message="Tests failed! Check test reports." 
+				if="test.failed" />
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: clean                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="clean">
+		<delete dir="${build_dir}"/>
+		<delete dir="${classes_dir}"/>
+		<delete dir="${jar_dir}"/>
+    </target>
+</project>

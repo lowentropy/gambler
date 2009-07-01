@@ -1,0 +1,220 @@
+POKER LANGUAGE TUTORIAL
+20050912:0218 <lowentropy@gmail.com>
+
+
+The basic components of the language are VARIABLES, CONDITIONS, and RULES.
+
+The processing of a poker strategy proceeds from top to bottom, and the entire file is processed each time an action is required. This does not mean every part of the file is considered; but each part will potentially be activated during the course of a game.
+
+The poker engine uses CONDITIONS in order to determine which RULES to activate. The basic form of a RULE is as follows:
+
+	condition -> action
+
+A CONDITION can be almost anything which can be determined by watching the poker game, including:
+
+	- which round is being played
+	- what last action was taken
+	- how many players are in the pot
+	- position of play
+	- cards in pocket and on table
+	- number of bets/raises
+
+More complicated conditions, such as whether the last card played indicates a possible straight for another player, can be defined by the rules but are not part of the poker engine itself. When referring to individual cards, the format "Vs" is followed, where V is the value of the card (2 - 10, J, Q, K, or A) and s is the suit (c, s, h, or d).
+
+Rules can be made progressively complicated by adding exceptions. For instance, we have a rule that says that after the turn, we should bet (if we're first in the pot) or raise the current bet.
+
+	POST-TURN -> bet/raise
+
+In reality, we don't want to raise a re-raise. This is an exceptional condition with an alternate action, and we express it like this:
+
+	POST-TURN -> bet/raise
+		BETS >= 2 -> call
+
+Then we decide that in this case, we won't call, but fold, if there's a scare card. Now the rule expands to:
+
+	POST-TURN -> bet/raise
+		BETS >= 2 -> call
+			SCARE -> fold
+
+This rule can be read as, "If we're post-turn, bet or raise a bet, UNLESS there's already a re-raise, then call, UNLESS there's a scare card, then fold." Each tab to the right indicates an "unles..."
+
+Now, sometimes rules are more complicated. For instance, if there's one of three scenarios that can occur in a rule, it's necessary to use another format. A colon can be used instead of the arrow to indicate that all of the below tabbed rules are to be executed, in order. For instance:
+
+	Condition_1 :
+		Condition_2 -> bet
+		Condition_3 -> call
+			Condition_4 -> fold
+
+The above will only apply if Condition_1 is true. Given that, if Condition_2 is true, the player bets. Otherwise, processing continues down the page. If Condition_3 is true (still given that Condition_1 is true), the player calls, UNLESS Condition_4 is also true, so that the player folds.
+
+Even more complex behavior can be achieved by defining custom conditions within the rules. Instead of an arrow or colon, the operator := is used. A custom condition is like a rule except the actions are all either "true" or "false", indicating the result of the condition. For instance, the definition of having a pair looks like this:
+
+	PAIR(N) := false
+		[N_, N_] in POCKET -> true
+
+The above says that the condition PAIR(N) (where N will be bound to the value of the cards in the pair) is false (no pair), UNLESS there are two cards of the same value (N) and any suit (indicated by _) in the players pocket, in which case PAIR(N) is true. Later in the program, this definition can be referenced:
+
+	PAIR(N) -> call
+		N >= Q -> bet/raise
+
+This says that if the player holds a pair, bet... but if that pair is at least two Queens, bet or raise instead. Notice that the value of N was bound to whatever card value is held in the pair. When rules are defined within other rules, these variables can be used as part of the rule (this is how scares can be defined differently for different hands, for instance). For example:
+
+	PAIR(N):
+		HIGH-PAIR := false
+			N > 10 -> true
+		SET := false
+			N_ in TABLE -> true
+
+This defines two sub-rules, HIGH-PAIR and SET, which depend on the value of the cards in the pair.
+
+Now we have defined the major concepts of the poker system, the rest is odds and ends. First, there is syntax relating to how to deal with hands of cards:
+
+	[3c, A_, X_, X_, Yh : X in [7,Q], Y < 5]
+
+The above is a hand which contains the three of clubs, an Ace of any suit, two other cards of the same value and any suit (which doesn't have to match), and a heart of a value less than five. The two cards of the same value must be either 7's or Queens.
+
+There are different sets of cards you can refer to:
+
+	POCKET	: what the player is holding
+	TABLE		: cards on the table
+	HAND		: all cards in hand
+
+Then there are some more variables:
+
+	POT			: amount of money in pot
+	BETS			: number of bets, including raises
+	MIN_BET		: minimum bet
+	RAISED		: whether player's bet was raised
+	RE-RAISED	 	: whether player's raise was raised
+	CARD		 	: last dealt card
+	ACTIONS[FLOP]	: action player took on flop
+	ACTIONS[TURN]	: action player took on turn
+
+ACTIONS[n] can be bet, raise, or call, possible prefixed by "check, ". So the following rule:
+
+	POST-RIVER:
+		ACTIONS[TURN] in [bet, check, *] -> fold
+
+means that on river, if the action on turn was either a bet (not a raise) or a check followed by anything, then fold. If you want to test for a bet OR a raise, use "ACTIONS[n] in [bet, raise]".
+
+Lastly, conditions can be combined for ease of use with the following operators:
+
+	A & B		: true if both A and B are true
+	A | B		: true if either A or B are true
+	!A		: true if A is false, false if A is true
+	(xxx)		: the value of xxx, used to order precedence
+	
+Values, such as BETS, POT, or cards, can be used with the following operators:
+
+	[x, y, z]	: this is either a list of numbers, actions, or cards
+	X in [...]	: true if X is a member of the list, false otherwise
+	A = B		: A is equal to B
+	A != B	: A is not equal to B
+	A < B		: A is less than B
+	A <= B	: A is less than or equal to B
+	A > B		: A is greater than B
+	A >= B	: A is greater than or equal to B
+
+The variables HAND, POCKET, and TABLE are lists of cards, which is why the following works:
+
+	!(X_ in POCKET & X > J) -> fold
+
+Which means, if there is no card held by the player that is larger than a jack. The above example is an example of what's called lazy binding; since the player might hold one card more than Jack and one less, both of these expressions:
+
+	X_ in POCKET & X > J
+	X_ in POCKET & X < J
+
+would evaluate to true, because a particular card X_ is not bound until after the condition > or < to J is seen.
+
+There's only a couple of other syntax to be aware of. First, any line of the file can be blank, and will be ignored. Second, if the poker engine sees the characters // , it will ignore the text on the rest of that line, allowing the user to enter comments
+
+	SET -> bet/raise			// we're chasing a set
+		RE-RAISED -> call		// but now we're scared off
+
+Lastly, if lines get long and ugly, you can continue them to the next line by using a backslash at the end of the line, like this:
+
+	POST-RIVER & PAIR & (ACTIONS[TURN] in [bet, raise]) \
+	-> check, call
+
+(the part of the rule following the backslash on the next line can be tabbed left or right, and will not affect how it's interpreted).
+
+Well, that should be all. If you've got questions, send them to <lowentropy@gmail.com>. I think it would be best if we wrote the rest of the rules the same as before, with you dictating and me developing the structure; this tutorial is mainly a guide for you to be able to change the rules later on. What follows is the latest iteration I have of the rules, as dictated by you.
+
+
+PAIR(N) := false
+	POCKET = [N_, N_] -> true
+
+RULES := true		// this is an alias
+INIT := false		// conditional section
+	PRE-FLOP -> true
+	
+
+PAIR(N):
+
+	RULES:
+		HIGH := false
+			N >= J -> true
+		OVER-CARD := false
+			CARD > N -> true
+		PAIR := true
+			[N_, N_, N_] in HAND -> false
+		SET := true
+			PAIR -> false
+		// TODO: define SCARE
+		// TODO: define BOAT
+	
+	BOAT -> bet/raise+
+
+	PRE-FLOP -> bet/call
+		(POSITION > 6) & (BETS = 0) & HIGH -> bet/raise
+			
+	POST-FLOP -> bet/raise
+		PAIR -> bet/call
+			OVER-CARD -> fold
+			
+	POST-TURN:
+		SET:
+			PLAYERS <= 3 -> bet/call
+				SCARE -> bet/call
+					BETS >= 2 -> fold
+				BETS >= 2 -> call
+			
+			PLAYERS > 3 -> bet/raise+
+				SCARE -> check, fold
+			
+		PAIR -> bet/raise
+			SCARE | OVER-CARD -> check, fold
+				PLAYERS <= 3 -> bet/call
+					BETS >= 2 -> fold
+			BETS >= 2 -> call	
+	
+	POST-RIVER & PAIR & (ACTIONS[TURN] = check, *) \
+	-> check, call
+		OVER-CARD -> check, fold
+			POT >= $4 -> check, call
+		SCARE -> check, fold
+			N >= 9:
+				SCARE_FLUSH | SCARE_STRAIGHT -> check, call
+		
+	POST-RIVER & PAIR & (ACTIONS[TURN] in [bet, raise]) \
+	-> check, call
+		OVER-CARD -> check, call
+		SCARE -> check, fold
+			POT >= $6 -> check, fold
+		BETS >= 2 -> fold
+		
+	POST-RIVER & SET & RE-RAISED:
+		OVER CARD -> bet/raise
+			BETS >= 2 -> call
+	
+	POST-RIVER & SET & (ACTIONS[TURN] = check, *) \
+	-> check, call
+		SCARE -> check, fold
+			N >= 9:
+				SCARE_FLUSH | SCARE_STRAIGHT -> check, call
+	
+	POST-RIVER & SET & (ACTIONS[TURN] in [bet, raise]) \
+	-> raise
+		SCARE CARD -> check, fold
+			POT >= $6 -> call
+		BETS >= 2-> call

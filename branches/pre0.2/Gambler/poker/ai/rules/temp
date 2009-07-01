@@ -1,0 +1,26 @@
+testAll(rules,vars,tests):
+	for r in rules:
+		if r.test not nul:
+			eval r.test on vars
+			if test was false:
+				continue
+		if r.action is null:
+			atp = testAll(r.subrules, vars, tests)
+			if atp not null:
+				return atp
+		else:
+			if r.action is assignment:
+				doAssign(r.action, r.subrules, vars, tests)
+			else:
+				atp = r.action
+				sub = testAll(r.subrules, vars, tests)
+				if sub not null:
+					atp = sub
+				return atp
+	return null			
+	
+doAssign(action, subrules, vars, tests);
+	t = new test(action, subrules, vars)
+	add t to tests
+
+	

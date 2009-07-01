@@ -1,0 +1,26 @@
+house:name;created;updated
+	screens
+		+screen:name;loadtime=0;auto=true;safe=(0,0)
+			?icons
+				*icon:name;size
+			data
+				*list:name
+					+field:name;type;mask=(.*);id=false
+				*field
+				*chat:name;chatfile
+			window:position;size;find
+				*verify:icon;offset;mode;?message
+				+anchor:name;offset
+				?close:offset
+			?styles
+				+style:name;fg;tol;font;ol=none
+			?components:anchor
+				*button:name;offset
+				*label:target;offset;size;?style;lines=1
+				*area:name;offset;size
+				*grid:target;offset;width;rows;delta;sep
+					*style
+					columns
+						*label
+						*button
+					?scrollbar:offset;width;scroll_top;scroll_height

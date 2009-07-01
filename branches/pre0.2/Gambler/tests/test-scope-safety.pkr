@@ -1,0 +1,7 @@
+// expect:
+//	3
+//	5
+
+N_ in [3_] -> print N
+N_ in [5_] -> print N
+exit

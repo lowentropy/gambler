@@ -1,0 +1,5 @@
+~~ user:*
+~~ text:*
+
+~~chat
+\<<user:u>><text:t> ~ chat(u,t)

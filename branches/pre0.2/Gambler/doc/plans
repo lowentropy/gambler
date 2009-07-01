@@ -1,0 +1,151 @@
+-----------------------
+ Plans for Gambler 0.2
+-----------------------
+
+Questions
+
+- what languages to use, for which components?
+
+- how to change the code organization?
+
+- what development processes to use?
+
+- which new directions to pursue for 0.2?
+
+- expansion roadmap?
+
+- how to fix hacks?
+
+	- logging
+	
+	- config
+	
+	- central control
+	
+	- dynamic version
+	
+- real scientific tests
+
+
+Ideas
+
+> what languages to use, for which components?
+
+	- in any case, start using common protocol
+		- use Online Poker Protocol (OPP)
+		  http://games.cs.ualberta.ca/webgames/poker/bots.html
+		- XML-RPC?
+	- some stuff needs to be in C (use SWIG?)
+		- reasons:
+			- optimization
+			- shared modules
+		- what stuff
+			- all of bayes (port)
+			- poker state engine (port)
+			- poker prob. engine (new)
+			- OCR (redo)
+	- some stuff is better scripted
+		- high-level AI could use Ruby
+		- some admin/utils can be Ruby/Web based
+		- logging can be done in multiple levels w/ SQL
+			- Java
+			- Ruby/Rails
+		- cluster server
+		- logger?
+	- probably in Java
+		- Anti-GUI
+	- some stuff, i don't know
+		- session server?
+		- base server?
+
+> how to change the code organization?
+
+	- VNC
+		- new screen control layer
+			- init inputs: source, encoding, buffer memory, callbacks
+			- methods: getparams, update(sync/async[,to]), close
+			- stream access: [out]control, [in]buffer, [in]meta
+	- Anti-GUI
+		- not sure how to structure
+			- object model
+			- event model
+			- control model
+	- XML
+		- each language uses own XML stream lib
+			- use real XML schemas
+	- Bayes
+		- C library with SWIG bindings
+	- Gambler
+		- TODO
+
+- what development processes to use?
+
+- which new directions to pursue for 0.2?
+
+	- new OCR algorithms
+		- see doc/new-ocr
+		- write in C + Ruby
+	- new AI methods
+		- * AGENT BASED *
+		- self-organizing networks
+		- knowledge learning
+		- neural networks
+		- simulation
+	- integrated SQL logging
+	- better game selection
+	- anti-gui
+
+- expansion roadmap?
+
+	- create a 'test account'
+		- one per sampling of houses
+		- separate IP
+		- false user info
+		- use dummy AI
+		- increase activity at regular intervals
+		- note account closure/investigation times,
+		  and try to determine house collusion
+		- create logical house domain boundaries
+	- set optimal levels within domains
+		- max profit per cost
+			- cost =
+				- compute time
+				- compute resources
+				- human effort
+				- risk
+	- once Gambler 0.2 is ready, do thorough
+	  compute resource tests to inform load balancing
+	- cash out everything everyday (automatic when possible)
+	- purchase big pipes with multiple IPs
+		- start in Tulsa and Chambana (two nodes)
+		- on each node:
+			- for each IP at node:
+				- for each domain:
+					- unique login w/ false user info
+					- separate online money acct
+
+- how to fix hacks?
+	
+	- load balancing
+		- ? TODO
+
+	- logging
+		- use SQL for data-based logs
+		- ? TODO
+		
+	- config
+		- ? TODO
+	
+	- central control
+		- web + cmdline
+		- monitoring (visual): web + ? (TODO)
+	
+	- dynamic versioning
+		- dynamic libraries? (TODO)
+		
+	- load balancing
+		- ? TODO
+	
+- real scientific tests
+
+	- TODO

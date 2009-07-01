@@ -1,0 +1,31 @@
+Tier 1: vnc cluster
+	- must run on UNIX/Linux
+	- controlled from web interface
+	- starts/stops vnc servers
+	- moves windows between displays
+	- (future) measures bandwidth
+
+Tier 2: poker game server
+	- controlled from web interface
+	- manage selection of poker games
+	- start/stop poker games
+	- one-to-many with vnc clusters
+	- multiplex vnc screens in clusters
+	- translate game commands to pointer events
+	- detect events within screen areas with AI
+	- translate screen events to game updates
+
+Tier 3: poker knowledge base
+	- controlled from web interface
+	- one-to-many with game servers
+	- contains AI for playing poker
+	- applies AI parameters to active games
+	- maintains independent database
+
+Web Interface
+	- start/stop game servers and clusters
+	- manage AI parameters
+	- inspect/control game load
+	- inspect/control cash flow
+	- snoop on poker game screens
+	- manual poker game control

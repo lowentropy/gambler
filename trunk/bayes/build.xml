@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!-- ====================================================================== 
+     Jun 2, 2006 4:38:59 PM                                                        
+
+     Bayes
+     I guess I'm supposed to describe the project? Fine, this is a bayesian network tool. I think.
+     
+     josephholsten                                                                
+     ====================================================================== -->
+<project name="bayes" default="all">
+    <description>
+            I guess I'm supposed to describe the project? Fine, this is a bayesian network tool. I think.
+    </description>
+
+	<property name="src_dir" location="src/bayes"/>
+	<property name="test_dir" location="src/test"/>
+	<property name="doc_dir" location="javadoc"/>
+	<property name="build_dir" location="bin"/>
+	<property name="classes_dir" location="${build_dir}"/>
+	<property name="jar_dir" location="${build_dir}"/>
+	<property name="jar_path" location="${jar_dir}/${ant.project.name}.jar"/>
+	<property name="junit_path" location= "/Users/josephholsten/Desktop/eclipse/plugins/org.junit_3.8.1/junit.jar"/>
+
+	<path id="classpath">
+		<pathelement location="${jar_dir}"/>
+	  	<pathelement location="../bayes/bin"/>
+	  	<pathelement location="/Users/josephholsten/Desktop/eclipse/plugins/org.junit_3.8.1/junit.jar"/>
+	</path>
+
+	
+    <!-- ================================= 
+          target: all              
+         ================================= -->
+    <target name="all" depends="clean, prepare, compile, doc, test, archive" description="--> Build Bayes fresh for deployment" />
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: prepare                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="prepare">
+		<mkdir dir="${build_dir}"/>
+    		<mkdir dir="${classes_dir}"/>
+    		<mkdir dir="${jar_dir}"/>
+		<mkdir dir="${doc_dir}"/>
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: compile                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="compile" depends="prepare">
+	    <javac srcdir="${src_dir}" destdir="${classes_dir}">
+    	</javac>
+    </target>
+	
+    <!-- - - - - - - - - - - - - - - - - -
+          target: archive              
+         - - - - - - - - - - - - - - - - - -->
+	<target name="archive" depends="prepare, compile">
+		<jar destfile="${jar_dir}/${ant.project.name}.jar" basedir="${classes_dir}"/>
+	</target>
+	
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: doc                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="doc" depends="prepare">
+		<javadoc
+			destdir="${doc_dir}"
+			author="true"
+			version="true"
+			use="true"
+			package="true"
+			linksource="true"
+			failonerror="true">
+			<fileset dir="${src_dir}">
+			    <include name="**/*.java"/>
+			</fileset>
+		</javadoc>
+	</target>
+		
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: test_compile              
+         - - - - - - - - - - - - - - - - - -->
+    <target name="test_compile" depends="compile">
+	    <javac
+	    		srcdir="${test_dir}"
+    			destdir="${classes_dir}"
+	    		classpath="${junit_path}" 
+			failonerror="true"/>
+    </target>
+	
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: test                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="test" depends="test_compile">
+		<junit
+			errorProperty="test.failed"
+			failureProperty="test.failed">
+			<classpath refid="classpath"/>
+			<formatter type="brief" usefile="false"/>
+		<formatter type="xml"/>
+			<batchtest>
+				<fileset dir="${classes_dir}" includes="**/*Test.class"/>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Check test reports." 
+			if="test.failed" /> 
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: clean       
+         - - - - - - - - - - - - - - - - - -->
+    <target name="clean">
+		<delete dir="${build_dir}"/>
+		<delete dir="${classes_dir}"/>
+		<delete dir="${jar_dir}"/>
+   		<delete dir="${doc_dir}"/>
+    </target>
+</project>

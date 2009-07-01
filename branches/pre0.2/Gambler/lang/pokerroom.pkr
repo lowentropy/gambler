@@ -1,0 +1,193 @@
+//////////////////////////////
+// DEFINE BASIC POKER RULES //
+//////////////////////////////
+
+//
+// checking:
+// can only check if first to act or if checked before
+//
+
+// hand precedence:
+// pair, 2 pair, 3 of a kind, straight, flush
+// full house, 4 of a kind, straight flush, royal flush
+
+PAIR(N) := false								// pair of N in pocket
+	[N_, N_] in POCKET -> true
+
+RULES := true									// this is an alias
+INIT := false									// conditional alias
+	PRE_FLOP -> true
+
+BOAT := false									// full house
+	[N_, N_, M_, M_, M_] in HAND -> true
+
+FLUSH := false									// flush
+	[_S, _S, _S, _S, _S] in HAND -> true
+
+STRAIGHT_DRAW := false							// open-ended straight draw
+	[C_, D_] in TABLE & CON_HIGH(L,H) -> false
+		C follows H -> false
+			D follows C -> true
+		L follows C -> false
+			C follows D -> true
+	
+STRAIGHT := false								// straight
+	STRAIGHT_DRAW -> false
+		[C_, D_, E_] in TABLE & CON_HIGH(A,B) -> false
+			C follows B -> false
+				D follows C -> false
+					E follows D -> true
+			A follows C -> false
+				C follows D -> false
+					D follows E -> true
+
+AXS(X,S) := false								// AQ or AK (X=Q/K), suited at S
+	[AS, XS] in POCKET & X >= Q -> true
+
+AXO(X) := false									// AQ or AK (X=Q/K), unsuited
+	[A_, X_] in POCKET & X >= Q -> true
+		AXS(Y,S) -> false
+
+CON(L,H) := false								// unsuited connectors, low=L, high=H
+	[L_, H_] in POCKET -> false
+		H follows L	-> true
+
+CON_HIGH(L,H) := false							// unsuited connectors, low=L, high=H
+	[L_, H_] in POCKET -> false
+		H follows L	-> false
+			L >= 10 -> true
+
+SCON_HIGH(L,H,S) := false						// suited connectors, low=L, high=H, suit=S
+	[LS, HS] in POCKET -> false
+		H follows L -> false
+			L >= 10 -> true
+
+BASE_SCARE := false								// basic scare is 3 of kind on table
+	[_X, _X, _X] in TABLE -> true
+		BOAT | FLUSH -> false
+
+
+
+///////////////////////////////////
+// PLAY A STRAIGHT OR FLUSH DRAW //
+///////////////////////////////////
+
+SCON_HIGH(L,H,S):
+	PRE_FLOP -> bet/call-
+	POST_FLOP -> fold
+		[_S, _S] in DEAL -> bet/call		// flush draw
+		STRAIGHT_DRAW -> bet/call			// open-ended straight draw
+	POST_TURN -> check, call
+		[_S, _S, _S] in TABLE -> bet/raise	// caught flush
+		STRAIGHT -> bet/raise				// caught straight
+	POST_RIVER -> check, fold
+		[_S, _S, _S] in TABLE -> bet/raise+	// caught flush
+		STRAIGHT -> bet/raise+				// caught straight
+
+
+/////////////////////////
+// PLAY UNSUITED AQ/AK //
+/////////////////////////
+
+AXO(N):
+	SCARE := false
+		BASE_SCARE -> true
+	PRE_FLOP -> call
+	POST_FLOP -> fold
+		[A_, N_] in TABLE -> bet/call
+	POST_TURN -> bet/call
+		SCARE -> fold
+	POST_RIVER -> bet/call
+		SCARE -> fold
+
+
+/////////////////////////
+// PLAY SUITED AQ/AK   //
+/////////////////////////
+
+AXS(N,S):
+	SCARE := false
+		BASE_SCARE -> true
+	PRE_FLOP -> call
+	POST_FLOP -> fold
+		[A_, N_] in TABLE -> bet/call
+		[_S, _S] in TABLE -> bet/call
+	POST_TURN -> check, call
+		[_S] in DEAL -> bet/raise+
+		SCARE -> fold
+	POST_RIVER -> fold
+		[A_] in TABLE -> bet/call
+		[N_] in TABLE -> bet/call
+		[_S] in TURN-DEAL -> bet/raise+
+		[_S] in DEAL -> bet/raise+
+
+
+/////////////////
+// PLAY A PAIR //
+/////////////////
+
+PAIR(N):
+	SCARE := false
+		BASE_SCARE -> true
+	HIGH := false
+		N >= J -> true
+	OVER_CARD := false
+		[M_] in DEAL & M > N -> true
+	SET := false
+		[N_, N_, N_] in HAND -> true
+	
+	BOAT -> bet/raise+
+
+	PRE_FLOP -> bet/call
+		(POSITION > 6) & (BETS = 0) & HIGH -> bet/raise
+			
+	POST_FLOP -> bet/raise
+		!SET -> bet/call
+			OVER_CARD -> fold
+			
+	POST_TURN:
+		SET:
+			PLAYERS <= 3 -> bet/call
+				SCARE -> bet/call
+					BETS >= 2 -> fold
+				BETS >= 2 -> call
+			
+			PLAYERS > 3 -> bet/raise+
+				SCARE -> check, fold
+			
+		PAIR -> bet/raise
+			SCARE | OVER_CARD -> check, fold
+				PLAYERS <= 3 -> bet/call
+					BETS >= 2 -> fold
+			BETS >= 2 -> call	
+	
+	POST_RIVER & !SET & TURN_CHECK \
+	-> check, call
+		OVER_CARD -> check, fold
+			POT >= $4 -> check, call
+		SCARE -> check, fold
+			N >= 9:
+				SCARE_FLUSH | SCARE_STRAIGHT -> check, call
+		
+	POST_RIVER & !SET & (TURN_BET | TURN_RAISE) \
+	-> check, call
+		OVER_CARD -> check, call
+		SCARE -> check, fold
+			POT >= $6 -> check, fold
+		BETS >= 2 -> fold
+		
+	POST_RIVER & SET & RE-RAISED:
+		OVER_CARD -> bet/raise
+			BETS >= 2 -> call
+	
+	POST_RIVER & SET & TURN_CHECK \
+	-> check, call
+		SCARE -> check, fold
+			N >= 9:
+				SCARE_FLUSH | SCARE_STRAIGHT -> check, call
+	
+	POST_RIVER & SET & (TURN_BET | TURN_RAISE) \
+	-> raise
+		SCARE -> check, fold
+			POT >= $6 -> call
+		BETS >= 2-> call

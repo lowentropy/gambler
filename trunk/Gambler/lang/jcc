@@ -1,0 +1,15 @@
+#! /bin/bash
+
+rm -f parser.java sym.java Yylex.java 2>/dev/null
+echo "Parsing lexical specification...
+" > ../logs/compile_out
+java -classpath ../ext\;../bin JLex.Main poker.lex >> ../logs/compile_out 2>&1 && \
+echo "
+Parsing language specification...
+" >> ../logs/compile_out && \
+java -classpath ../ext\;../bin java_cup.Main -expect 0 < poker.cup >> ../logs/compile_out 2>&1 && \
+mv poker.lex.java Yylex.java && \
+fixdos Yylex.java && \
+mv Yylex.java ../poker/ai/rules/Yylex.java 2>> ../logs/compile_out && \
+mv parser.java sym.java ../poker/ai/rules/ 2>> ../logs/compile_out
+cat ../logs/compile_out

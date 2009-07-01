@@ -1,0 +1,3 @@
+remove codebase=".*" from applet tag
+in tag w/ name="isRealMoney", change value="true" to value="<doreal>"
+remove param w/ name="noncachedurl"

@@ -1,0 +1,97 @@
+script code:
+	screen update scripts
+	activating listeners
+	timing updates
+	lists
+	simple variables and flags
+	event firing
+	transactions
+
+java code:
+	uses vars from script
+	registers callbacks for evts
+	callbacks to player
+
+
+script example:
+
+house pokerroom_com:
+
+    font_prefix = "pokerroom.com-"
+
+    schema lobby:
+    
+    	idle_pt = <x, y>
+    
+        list tables:
+
+            length = 11
+            rowheight = 16
+            selected = 0
+            
+            scroll_up = <x, y>
+            scroll_down = <x, y>
+			
+			selected_row:
+				color = #FFFFFF
+			
+			row:
+				color = #000000
+			
+            ?column.text:
+                color = @row.color
+                font = "status"
+                rect = @cell.rect
+
+            column:
+                rect = <x, y, w, h>
+                text table_rect
+
+            column:
+                rect = <x, y, w, h>
+                text money_type:
+                	pattern = "Play|Real"
+
+            column:
+                rect = <x, y, w, h>
+                text limit:
+                	pattern = "$[0-9]+-$[0-9]"
+            }
+
+            column:
+                rect = <x, y, w, h>
+                text players:
+                	pattern = "[0-9]/[0-9]"
+
+        stream lobby_chat:
+            rect = <x, y, w, h>
+
+    schema table:
+		// TODO
+		    
+    actions:
+    	
+    	default state lobby_init:
+    		activate schema lobby
+    		activate region initblock
+    		
+    		when initblock is valid:
+    			enter state in_lobby
+    
+    	state table_init
+    		deactivate schema lobby
+    		activate schema table
+    		activate region initblock
+    		
+    		when initblock is valid:
+    			enter state at_table
+    	
+		state in_lobby:
+			activate all listeners
+			
+			// TODO
+    	
+    	state at_table:
+    		deactivate schema table
+    		activate schema lobby
+			// TODO

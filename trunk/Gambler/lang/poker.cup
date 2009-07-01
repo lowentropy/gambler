@@ -1,0 +1,405 @@
+/*
+ * poker.cup: Java CUP syntax for AutoPoker rules language
+ * 
+ * 20050912 <lowentropy@gmail.com>
+ * Copyright (c) 2005 Nathan Matthews
+ */
+
+package poker.ai.rules;
+
+import java.io.StringReader;
+import java.io.FileReader;
+import java.util.List;
+import java.util.ArrayList;
+
+import poker.ai.core.*;
+
+parser code {:
+
+	public static String fname;
+	public static parser current;
+	public Object result;
+	
+	public static parser parseMain(String fname, FileReader fr)
+		throws Exception
+	{
+		Lexer.init(fname);
+		parser p = new parser(new Yylex(fr));
+		current = p;
+		p.result = p.parse().value;
+		return p;
+	}
+	
+	public static parser parseMain(String fname, StringReader sr)
+		throws Exception
+	{
+		Lexer.init(fname);
+		parser p = new parser(new Yylex(sr));
+		current = p;
+		p.result = p.parse().value;
+		return p;
+	}
+	
+:}
+
+
+terminal Token BET, FOLD, RAISE, CALL, CHECK, STRING, CALLM;
+terminal Token SLASH, AND, OR, PLUS, STOP, PRINT;
+terminal Token ARROW, COLON, ASSIGN, COM, TAB, UNTAB;
+terminal Token ATOM, NUMBER, CURRENCY, CARD, ERROR;
+terminal Token LP, RP, LSB, RSB, TRUE, FALSE, FOLLOWS;
+terminal Token LT, GT, LTEQ, GTEQ, EQ, NEQ, IN, NOT;
+
+
+non terminal Program		program;
+non terminal Rule			statement;
+non terminal Action			action_;
+non terminal Action			simple;
+non terminal String			call;
+non terminal String			raise;
+non terminal Action			check;
+non terminal Rule			rule;
+non terminal List			stmts;
+non terminal List			stmts_;
+non terminal List			subrules;
+non terminal List			subrules_;
+non terminal List			rules;
+non terminal Test			cond;
+non terminal Test			test1;
+non terminal Test			test2;
+non terminal Test			test;
+non terminal Token			rel;
+non terminal Value			value;
+non terminal Hand			hand;
+non terminal List			cards;
+non terminal String			card;
+non terminal Action			assign;
+non terminal List			args;
+non terminal List			arglist;
+non terminal Token			tf;
+
+
+program		::=	statement:s
+				{:
+					RESULT = new Program(s);
+				:}
+			|	program:p statement:s
+				{:
+					RESULT = p;
+					RESULT.addRule(s);
+				:}
+;
+
+statement	::=	action_:a
+				{:
+					RESULT = new Rule(a);
+				:}
+			|	rule:r
+				{:
+					RESULT = r;
+				:}
+			|	assign:a
+				{:
+					RESULT = new Rule(a);
+				:}
+;
+
+action_		::=	simple:s
+				{:
+					RESULT = s;
+				:}
+			|	check:c
+				{:
+					RESULT = c;
+				:}
+			|	tf:tf
+				{:
+					RESULT = new Action(Boolean.parseBoolean(tf.text));
+				:}
+			|	PRINT STRING:s
+				{:
+					RESULT = Action.makePrintAction(s.text);
+				:}
+			|	PRINT ATOM:a
+				{:
+					RESULT = Action.makePrintVarAction(a.text);
+				:}
+			|	STOP
+				{:
+					RESULT = Action.makeStopAction();
+				:}
+;
+
+simple		::=	BET:t
+				{:
+					RESULT = new Action(t.text);
+				:}
+			|	FOLD:t
+				{:
+					RESULT = new Action(t.text);
+				:}
+			|	raise:t
+				{:
+					RESULT = new Action(t);
+				:}
+			|	call:c
+				{:
+					RESULT = new Action(c);
+				:}
+			|	BET:a SLASH call:c
+				{:
+					RESULT = new Action(a.text, c);
+				:}
+			|	BET:a SLASH raise:b
+				{:
+					RESULT = new Action(a.text, b);
+				:}
+;
+call		::= CALL:c
+				{:
+					RESULT = c.text;
+				:}
+			|	CALLM:c
+				{:
+					RESULT = c.text;
+				:}
+;
+
+raise		::=	RAISE:r
+				{:
+					RESULT = r.text;
+				:}
+			|	RAISE:r PLUS:p
+				{:
+					RESULT = r.text + "+";
+				:}
+;
+
+check		::= CHECK COM simple:s
+				{:
+					RESULT = s;
+					RESULT.setCheck(true);
+				:}
+;
+
+rule		::=	test:t ARROW action_:a
+				{:
+					RESULT = new Rule(t, a);
+				:}
+			|	test:t ARROW action_:a subrules:s
+				{:
+					RESULT = new Rule(t, a, s);
+				:}
+			|	test:t COLON stmts:s
+				{:
+					RESULT = new Rule(t, s);
+				:}
+;
+
+stmts		::=	stmts_:s UNTAB
+				{:
+					RESULT = s;
+				:}
+;
+
+stmts_		::=	TAB statement:s
+				{:
+					RESULT = new ArrayList();
+					RESULT.add(s);
+				:}
+			|	stmts_:S statement:s
+				{:
+					RESULT = S;
+					RESULT.add(s);
+				:}
+;
+
+subrules_	::=	
+				{:
+					RESULT = new ArrayList(0);
+				:}
+			|	subrules:s
+				{:
+					RESULT = s;
+				:}
+;
+
+subrules	::=	TAB rules:r UNTAB
+				{:
+					RESULT = r;
+				:}
+;
+
+rules		::=	rule:r
+				{:
+					RESULT = new ArrayList();
+					RESULT.add(r);
+				:}
+			|	rules:s rule:r
+				{:
+					RESULT = s;
+					s.add(r);
+				:}
+;
+
+cond		::=	ATOM:c args:a
+				{:
+					RESULT = new Test(c.text, a);
+				:}
+			|	value:v1 rel:r value:v2
+				{:
+					RESULT = new Test(v1, r.text, v2);
+				:}
+			|	LP test:t RP
+				{:
+					RESULT = t;
+				:}
+;
+
+test1		::=	cond:t
+				{:
+					RESULT = t;
+				:}
+			|	NOT test1:t
+				{:
+					RESULT = t.not();
+				:}
+;
+
+test2		::=	test1:t
+				{:
+					RESULT = t;
+				:}
+			|	test2:t1 AND:x test1:t2
+				{:
+					RESULT = new Test(x.text, t1, t2);
+				:}
+;
+
+test		::=	test2:t
+				{:
+					RESULT = t;
+				:}
+			|	test:t1 OR:x test2:t2
+				{:
+					RESULT = new Test(x.text, t1, t2);
+				:}
+;
+
+rel			::=	LT:x
+				{:
+					RESULT = x;
+				:}
+			|	GT:x
+				{:
+					RESULT = x;
+				:}
+			|	LTEQ:x
+				{:
+					RESULT = x;
+				:}
+			|	GTEQ:x
+				{:
+					RESULT = x;
+				:}
+			|	EQ:x
+				{:
+					RESULT = x;
+				:}
+			|	NEQ:x
+				{:
+					RESULT = x;
+				:}
+			|	IN:x
+				{:
+					RESULT = x;
+				:}
+			|	FOLLOWS:f
+				{:
+					RESULT = f;
+				:}
+;
+
+value		::=	ATOM:a
+				{:
+					RESULT = Value.fromAtom(a.text);
+				:}
+			|	CARD:c
+				{:
+					RESULT = Value.fromCard(c.text);
+				:}
+			|	hand:h
+				{:
+					RESULT = Value.fromHand(h);
+				:}
+			|	CURRENCY:c
+				{:
+					RESULT = Value.fromCurrency(c.text);
+				:}
+			|	NUMBER:n
+				{:
+					RESULT = Value.fromCardValue(n.text);
+				:}
+;
+
+hand		::=	LSB cards:c RSB
+				{:
+					RESULT = new Hand(c, true);
+				:}
+;
+
+cards		::=	card:c
+				{:
+					RESULT = new ArrayList();
+					RESULT.add(c);
+				:}
+			|	cards:s COM card:c
+				{:
+					RESULT = s;
+					RESULT.add(c);
+				:}
+;
+
+card		::=	CARD:x
+				{:
+					RESULT = x.text;
+				:}
+;
+
+assign		::=	ATOM:n args:a ASSIGN tf:tf subrules_:s
+				{:
+					RESULT = new Action(n.text, a, Boolean.parseBoolean(tf.text), s);
+				:}
+;
+
+args		::=
+				{:
+					RESULT = new ArrayList();
+				:}
+			|	LP arglist:a RP
+				{:
+					RESULT = a;
+				:}
+;
+
+arglist		::=	ATOM:n
+				{:
+					RESULT = new ArrayList();
+					RESULT.add(n.text);
+				:}
+			|	arglist:a COM ATOM:n
+				{:
+					RESULT = a;
+					RESULT.add(n.text);
+				:}
+;
+
+tf			::=	TRUE:x
+				{:
+					RESULT = x;
+				:}
+			|	FALSE:x
+				{:
+					RESULT = x;
+				:}
+;

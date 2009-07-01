@@ -1,0 +1,6 @@
+== Gambler
+
+This was a project aimed at creating a poker-playing bot
+using Bayesian (belief) networks. It uses a distributed
+architecture which allows it to run clusters of client machines
+in different locations, and uses VNC to run the poker interface.

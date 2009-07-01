@@ -1,0 +1,21 @@
+<cruisecontrol>
+        <project name="gambler" buildafterfailed="false">
+                <bootstrappers>
+                        <currentbuildstatusbootstrapper
+                                file="logs/gambler/buildstatus.txt" />
+                </bootstrappers>
+                <modificationset quietperiod="300">
+                        <svn localworkingcopy="checkout/gambler" />
+                </modificationset>
+                <schedule interval="60">
+                        <ant buildfile="cc-build.xml" target="cruise_control" />
+                </schedule>
+                <log dir="logs/gambler">
+                        <merge dir="checkout/gambler/build/test-results" />
+                </log>
+                <publishers>
+                        <currentbuildstatuspublisher
+                                file="logs/gambler/buildstatus.txt" />
+                </publishers>
+        </project>
+</cruisecontrol>

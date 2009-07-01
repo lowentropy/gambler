@@ -1,0 +1,47 @@
+poker.cluster:
+	ClusterServer.java
+	* PokerProtocol.java
+	
+poker.session:
+	SessionServer.java
+	PokerSession.java
+	ScreenListener.java
+	PokerScreen.java
+	ScreenAreaListener.java
+	CustomRecognizer.java
+	TextStatus.java
+	TextRecognizer.java
+	* RfbProtocol.java
+	* VncClient.java
+	* GraphicsAI.java
+	* Framebuffer.java
+	* DesCipher.java
+	* PokerProtocol.java
+
+poker.base:
+	PokerBaseServer.java
+	PokerDatabase.java
+	* PokerAI.java
+	* PokerProtocol.java
+	
+poker.web:
+	PokerApplet.java
+	VncCanvas.java
+	* RfbProtocol.java
+	* VncClient.java
+	* Framebuffer.java
+	* PokerProtocol.java
+
+poker.common
+	PokerProtocol.java
+	DesCipher.java
+	PixelMask.java
+	
+poker.ai
+	PokerAI.java
+	GraphicsAI.java
+	
+poker.vnc
+	VncClient.java
+	Framebuffer.java
+	RfbProtocol.java

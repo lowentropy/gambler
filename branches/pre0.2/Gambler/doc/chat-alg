@@ -1,0 +1,86 @@
+data/widgets:
+
+sitin
+leave
+lobby
+cashier
+chat_box
+bet
+pot
+rake
+chat (6)
+players
+	name
+	cash
+	dealer
+bet    2(fcb)
+check  1(fcb)
+call   1(fcr)
+fold   0(fcr)
+raise  2(fcr)
+cost_call
+cost_bet
+
+
+pattern:
+	name
+	items[]
+		nodes[]
+			text (or)
+			groupname
+			varname
+		value
+		args[]
+
+
+example:
+
+~~ parent
+some<child:c>text	~ some(c)
+other<child:c>text	~ other(c)
+
+~~ child
+value: <value:v>	~ value(v)
+
+~~ value:number
+
+
+solution:
+
+value:  ([0-9]+)
+child:  (value:([0-9]+))
+		[1] ; [value(v)] ; [[null]] ; [[v]]
+parent: (some(value:([0-9]+))text)|(other(value:([0-9]+))text)
+		[1,4] ; [some(c),other(c)] ; [[child],[child]] ; [[c],[c]]
+	
+	
+alg(text):
+	match against text
+	iterate A idxs
+	find group for each idx
+	group idx which is not null: I, G
+	for subgroup type in C, assign in D:
+		do match for C with G, assign value to D
+	return value by collecting args
+
+construct(items):
+	N = 1
+	for each item:
+		item[i] = N
+		add (
+		for each node:
+			if text:
+				add text 
+			else if special:
+				add (spec) (N = N + 1)
+				add null to C[i]
+				add target name to D[i]
+			else:
+				bound child type with () and insert (N = N + num(child) + 1)
+				add child type to C[i]
+				add target name to D[i]
+		add )
+		N = N + 1
+		add |
+	remove last |
+	num = N - 1

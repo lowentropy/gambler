@@ -1,0 +1,225 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Courier New;}{\f1\fnil Courier New;}}
+{\colortbl ;\red255\green255\blue255;}
+{\*\generator Msftedit 5.41.15.1503;}\viewkind4\uc1\pard\highlight1\f0\fs20 POKER LANGUAGE TUTORIAL\par
+20050912:0218 <lowentropy@gmail.com>\f1\par
+\par
+\par
+The basic components of the language are \f0 VARIABLES\f1 , \f0 CONDITIONS\f1 , and \f0 RULES\f1 .\highlight0\par
+\par
+\highlight1 The processing of a poker strategy proceeds from top to bottom, and the entire file is processed each time an action is required\f0 . This does not mean every part of the file is considered; but each part will potentially be activated during the course of a game.\par
+\par
+The poker engine uses CONDITIONS in order to determine which RULES to activate. The basic form of a RULE is as follows:\par
+\par
+\tab condition -> action\par
+\par
+A CONDITION can be almost anything which can be determined by watching the poker game, including:\par
+\par
+\tab - which round is being played\par
+\tab - what last action was taken\par
+\tab - how many players are in the pot\par
+\tab - position of play\par
+\tab - cards in pocket and on table\par
+\tab - number of bets/raises\par
+\par
+More complicated conditions, such as whether the last card played indicates a possible straight for another player, can be defined by the rules but are not part of the poker engine itself. When referring to individual cards, the format "Vs" is followed, where V is the value of the card (2 - 10, J, Q, K, or A) and s is the suit (c, s, h, or d).\par
+\par
+Rules can be made progressively complicated by adding exceptions. For instance, we have a rule that says that after the turn, we should bet (if we're first in the pot) or raise the current bet.\par
+\par
+\tab POST-TURN -> bet/raise\par
+\par
+In reality, we don't want to raise a re-raise. This is an exceptional condition with an alternate action, and we express it like this:\par
+\par
+\tab POST-TURN -> bet/raise\par
+\tab\tab BETS >= 2 -> call\par
+\par
+Then we decide that in this case, we won't call, but fold, if there's a scare card. Now the rule expands to:\par
+\par
+\tab POST-TURN -> bet/raise\par
+\tab\tab BETS >= 2 -> call\par
+\tab\tab\tab SCARE -> fold\par
+\par
+This rule can be read as, "If we're post-turn, bet or raise a bet, UNLESS there's already a re-raise, then call, UNLESS there's a scare card, then fold." Each tab to the right indicates an "unles..."\par
+\par
+Now, sometimes rules are more complicated. For instance, if there's one of three scenarios that can occur in a rule, it's necessary to use another format. A colon can be used instead of the arrow to indicate that all of the below tabbed rules are to be executed, in order. For instance:\par
+\par
+\tab Condition_1 :\par
+\tab\tab Condition_2 -> bet\par
+\tab\tab Condition_3 -> call\par
+\tab\tab\tab Condition_4 -> fold\par
+\par
+The above will only apply if Condition_1 is true. Given that, if Condition_2 is true, the player bets. Otherwise, processing continues down the page. If Condition_3 is true (still given that Condition_1 is true), the player calls, UNLESS Condition_4 is also true, so that the player folds.\par
+\par
+Even more complex behavior can be achieved by defining custom conditions within the rules. Instead of an arrow or colon, the operator := is used. A custom condition is like a rule except the actions are all either "true" or "false", indicating the result of the condition. For instance, the definition of having a pair looks like this:\par
+\par
+\tab PAIR(N) := false\par
+\tab\tab [N_, N_] in POCKET -> true\par
+\par
+The above says that the condition PAIR(N) (where N will be bound to the value of the cards in the pair) is false (no pair), UNLESS there are two cards of the same value (N) and any suit (indicated by _) in the players pocket, in which case PAIR(N) is true. Later in the program, this definition can be referenced:\par
+\par
+\tab PAIR(N) -> call\par
+\tab\tab N >= Q -> bet/raise\par
+\par
+This says that if the player holds a pair, bet... but if that pair is at least two Queens, bet or raise instead. Notice that the value of N was bound to whatever card value is held in the pair. When rules are defined within other rules, these variables can be used as part of the rule (this is how scares can be defined differently for different hands, for instance). For example:\par
+\par
+\tab PAIR(N):\par
+\tab\tab HIGH-PAIR := false\par
+\tab\tab\tab N > 10 -> true\par
+\tab\tab SET := false\par
+\tab\tab\tab N_ in TABLE -> true\par
+\par
+This defines two sub-rules, HIGH-PAIR and SET, which depend on the value of the cards in the pair.\par
+\par
+Now we have defined the major concepts of the poker system, the rest is odds and ends. First, there is syntax relating to how to deal with hands of cards:\par
+\par
+\tab [3c, A_, X_, X_, Yh : X in [7,Q], Y < 5]\par
+\par
+The above is a hand which contains the three of clubs, an Ace of any suit, two other cards of the same value and any suit (which doesn't have to match), and a heart of a value less than five. The two cards of the same value must be either 7's or Queens.\par
+\par
+There are different sets of cards you can refer to:\par
+\par
+\tab POCKET\tab : what the player is holding\par
+\tab TABLE\tab\tab : cards on the table\par
+\tab HAND\tab\tab : all cards in hand\par
+\par
+Then there are some more variables:\par
+\par
+\tab POT\tab\tab\tab : amount of money in pot\par
+\tab BETS\tab\tab\tab : number of bets, including raises\par
+\tab MIN_BET\tab\tab : minimum bet\par
+\tab RAISED\tab\tab : whether player's bet was raised\par
+\tab RE-RAISED\tab  \tab : whether player's raise was raised\par
+\tab CARD\tab\tab  \tab : last dealt card\par
+\tab ACTIONS[FLOP]\tab : action player took on flop\par
+\tab ACTIONS[TURN]\tab : action player took on turn\par
+\par
+ACTIONS[n] can be bet, raise, or call, possible prefixed by "check, ". So the following rule:\par
+\par
+\tab POST-RIVER:\par
+\tab\tab ACTIONS[TURN] in [bet, check, *] -> fold\par
+\par
+means that on river, if the action on turn was either a bet (not a raise) or a check followed by anything, then fold. If you want to test for a bet OR a raise, use "ACTIONS[n] in [bet, raise]".\par
+\par
+Lastly, conditions can be combined for ease of use with the following operators:\par
+\par
+\tab A & B\tab\tab : true if both A and B are true\par
+\tab A | B\tab\tab : true if either A or B are true\par
+\tab !A\tab\tab : true if A is false, false if A is true\par
+\tab (xxx)\tab\tab : the value of xxx, used to order precedence\par
+\tab\par
+Values, such as BETS, POT, or cards, can be used with the following operators:\par
+\par
+\tab [x, y, z]\tab : this is either a list of numbers, actions, or cards\par
+\tab X in [...]\tab : true if X is a member of the list, false otherwise\par
+\tab A = B\tab\tab : A is equal to B\par
+\tab A != B\tab : A is not equal to B\par
+\tab A < B\tab\tab : A is less than B\par
+\tab A <= B\tab : A is less than or equal to B\par
+\tab A > B\tab\tab : A is greater than B\par
+\tab A >= B\tab : A is greater than or equal to B\par
+\par
+The variables HAND, POCKET, and TABLE are lists of cards, which is why the following works:\par
+\par
+\tab !(X_ in POCKET & X > J) -> fold\par
+\par
+Which means, if there is no card held by the player that is larger than a jack. The above example is an example of what's called lazy binding; since the player might hold one card more than Jack and one less, both of these expressions:\par
+\par
+\tab X_ in POCKET & X > J\par
+\tab X_ in POCKET & X < J\par
+\par
+would evaluate to true, because a particular card X_ is not bound until after the condition > or < to J is seen.\par
+\par
+There's only a couple of other syntax to be aware of. First, any line of the file can be blank, and will be ignored. Second, if the poker engine sees the characters // , it will ignore the text on the rest of that line, allowing the user to enter comments\par
+\par
+\tab SET -> bet/raise\tab\tab\tab // we're chasing a set\par
+\tab\tab RE-RAISED -> call\tab\tab // but now we're scared off\par
+\par
+Lastly, if lines get long and ugly, you can continue them to the next line by using a backslash at the end of the line, like this:\par
+\par
+\f1\tab POST-RIVER & PAIR & (ACTIONS[TURN] in [bet, raise]) \\\highlight0\par
+\highlight1\tab -> check, call\highlight0\par
+\highlight1\f0\par
+(the part of the rule following the backslash on the next line can be tabbed left or right, and will not affect how it's interpreted).\par
+\par
+Well, that should be all. If you've got questions, send them to <lowentropy@gmail.com>. I think it would be best if we wrote the rest of the rules the same as before, with you dictating and me developing the structure; this tutorial is mainly a guide for you to be able to change the rules later on. What follows is the latest iteration I have of the rules, as dictated by you.\par
+\par
+\par
+\f1 PAIR(N) := false\highlight0\par
+\highlight1\tab POCKET = [N_, N_] -> true\highlight0\par
+\par
+\highlight1 RULES := true\tab\tab // this is an alias\highlight0\par
+\highlight1 INIT := false\tab\tab // conditional section\highlight0\par
+\highlight1\tab PRE-FLOP -> true\highlight0\par
+\highlight1\tab\highlight0\par
+\par
+\highlight1 PAIR(N):\highlight0\par
+\par
+\highlight1\tab RULES:\highlight0\par
+\highlight1\tab\tab HIGH := false\highlight0\par
+\highlight1\tab\tab\tab N >= J -> true\highlight0\par
+\highlight1\tab\tab OVER-CARD := false\highlight0\par
+\highlight1\tab\tab\tab CARD > N -> true\highlight0\par
+\highlight1\tab\tab PAIR := true\highlight0\par
+\highlight1\tab\tab\tab [N_, N_, N_] in HAND -> false\highlight0\par
+\highlight1\tab\tab SET := true\highlight0\par
+\highlight1\tab\tab\tab PAIR -> false\highlight0\par
+\highlight1\tab\tab // TODO: define SCARE\par
+\f0\tab\tab // TODO: define BOAT\highlight0\f1\par
+\highlight1\tab\highlight0\par
+\highlight1\tab BOAT -> bet/raise+\highlight0\par
+\par
+\highlight1\tab PRE-FLOP -> bet/call\highlight0\par
+\highlight1\tab\tab (POSITION > 6) & (BETS = 0) & HIGH -> bet/raise\highlight0\par
+\highlight1\tab\tab\tab\highlight0\par
+\highlight1\tab POST-FLOP -> bet/raise\highlight0\par
+\highlight1\tab\tab PAIR -> bet/call\highlight0\par
+\highlight1\tab\tab\tab OVER-CARD -> fold\highlight0\par
+\highlight1\tab\tab\tab\highlight0\par
+\highlight1\tab POST-TURN:\highlight0\par
+\highlight1\tab\tab SET:\highlight0\par
+\highlight1\tab\tab\tab PLAYERS <= 3 -> bet/call\highlight0\par
+\highlight1\tab\tab\tab\tab SCARE -> bet/call\highlight0\par
+\highlight1\tab\tab\tab\tab\tab BETS >= 2 -> fold\highlight0\par
+\highlight1\tab\tab\tab\tab BETS >= 2 -> call\highlight0\par
+\highlight1\tab\tab\tab\highlight0\par
+\highlight1\tab\tab\tab PLAYERS > 3 -> bet/raise+\highlight0\par
+\highlight1\tab\tab\tab\tab SCARE -> check, fold\highlight0\par
+\highlight1\tab\tab\tab\highlight0\par
+\highlight1\tab\tab PAIR -> bet/raise\highlight0\par
+\highlight1\tab\tab\tab SCARE | OVER-CARD -> check, fold\highlight0\par
+\highlight1\tab\tab\tab\tab PLAYERS <= 3 -> bet/call\highlight0\par
+\highlight1\tab\tab\tab\tab\tab BETS >= 2 -> fold\highlight0\par
+\highlight1\tab\tab\tab BETS >= 2 -> call\tab\highlight0\par
+\highlight1\tab\highlight0\par
+\highlight1\tab POST-RIVER & PAIR & (ACTIONS[TURN] = check, *) \\\highlight0\par
+\highlight1\tab -> check, call\highlight0\par
+\highlight1\tab\tab OVER-CARD -> check, fold\highlight0\par
+\highlight1\tab\tab\tab POT >= $4 -> check, call\highlight0\par
+\highlight1\tab\tab SCARE -> check, fold\highlight0\par
+\highlight1\tab\tab\tab N >= 9:\highlight0\par
+\highlight1\tab\tab\tab\tab SCARE_FLUSH | SCARE_STRAIGHT -> check, call\highlight0\par
+\highlight1\tab\tab\highlight0\par
+\highlight1\tab POST-RIVER & PAIR & (ACTIONS[TURN] in [bet, raise]) \\\highlight0\par
+\highlight1\tab -> check, call\highlight0\par
+\highlight1\tab\tab OVER-CARD -> check, call\highlight0\par
+\highlight1\tab\tab SCARE -> check, fold\highlight0\par
+\highlight1\tab\tab\tab POT >= $6 -> check, fold\highlight0\par
+\highlight1\tab\tab BETS >= 2 -> fold\highlight0\par
+\highlight1\tab\tab\highlight0\par
+\highlight1\tab POST-RIVER & SET & RE-RAISED:\highlight0\par
+\highlight1\tab\tab OVER CARD -> bet/raise\highlight0\par
+\highlight1\tab\tab\tab BETS >= 2 -> call\highlight0\par
+\highlight1\tab\highlight0\par
+\highlight1\tab POST-RIVER & SET & (ACTIONS[TURN] = check, *) \\\highlight0\par
+\highlight1\tab -> check, call\highlight0\par
+\highlight1\tab\tab SCARE -> check, fold\highlight0\par
+\highlight1\tab\tab\tab N >= 9:\highlight0\par
+\highlight1\tab\tab\tab\tab SCARE_FLUSH | SCARE_STRAIGHT -> check, call\highlight0\par
+\highlight1\tab\highlight0\par
+\highlight1\tab POST-RIVER & SET & (ACTIONS[TURN] in [bet, raise]) \\\highlight0\par
+\highlight1\tab -> raise\highlight0\par
+\highlight1\tab\tab SCARE CARD -> check, fold\highlight0\par
+\highlight1\tab\tab\tab POT >= $6 -> call\highlight0\par
+\highlight1\tab\tab BETS >= 2-> call\highlight0\par
+\highlight1\f0\par
+}
+ 

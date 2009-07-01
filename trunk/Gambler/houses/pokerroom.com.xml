@@ -1,0 +1,636 @@
+<house name="pokerroom.com" created="20060102" updated="20060606">
+	<screens>
+		
+		<screen name="web" auto="false">
+
+			<data></data>
+			
+			<icons>
+				<!-- pos=(300,304) -->
+				<icon name="login" size="(31,12)">
+					5c5e5c4c4c4e4c4e4e4e4e4c5c4e4c4e4e1c4e4c
+					4e5c4e4c4e4c4e4c1c4e0c4e4c4e460c440c440c
+					0c0c440c460c460c440c0c44440c440c440c460c
+					04041c460c0c440c044404460c440c040404040c
+					4404040c440c460c040c440444460c04a666460c
+					04045effffb644040cf7fff70c46666604ff6644
+					5eb604044c0c04b6b70404045cff665effb60cff
+					b65cf7ff0ca7b644ffff0c5eff0b444e0c46b6a7
+					0c440cb7b604040cff5eff4404045e04b7b604ff
+					f7b75eff0c040c4404b6b70c0446b6a7440c44ff
+					5eff0ca7ffff04b6a704ff4cffa7ff44044c0c44
+					b6b704040464ff4c04b7ff4cff5e045eff46b7b6
+					04ff445effff040b460c04a7ffffffb644a7ffff
+					ff4e0c5effffffff04b6a704ff040cffff07440c
+					4604040c04040404040c040404460c0404044404
+					460c44040404040407040c0c440c04440c440c04
+					040444040404440c040c040404040c440b070707
+					04440404440b03040404440b040b4403440b0403
+					4403040344030444040b0403
+				</icon>
+				
+				<!-- pos=(352,410) -->
+				<icon name="arrow" size="(15,16)">
+					ffffffffffffffffffffffffffffffffffffffff
+					fffffffffffffffffffffffffffffff75e440404
+					4eb6ffffffffffffffb6040c0c040404044ef7ff
+					ffffffb644044ef70c040404048effffffff4e04
+					044effb60404040404b7ffffb70404045cffffb7
+					460404048effff660404044effffffb64404040c
+					ffff5e0404044cffffffff5e040404ffff660404
+					044effffff5c0404040cfffff70404045cffff5e
+					040404045cffffff4e04044eff5c0404040404b7
+					fffffff704045c5e040404040407ffffffffffa7
+					0c0404040404045e07ffffffffffffbe5e460446
+					4e070707ffffffffffffffffffffffffffffffff
+				</icon>
+			</icons>
+			
+			<window position="(0,0)" size="(1024,768)" find="fixed">
+				<anchor name="root" offset="(0,0)"/>
+				<close offset="(1011,10)"/>
+			</window>
+
+			<components anchor="root">
+				<button name="login" offset="(389,155)"/>
+				<button name="play" offset="(407,535)"/>
+			</components>
+		</screen>
+		
+		<screen name="table" auto="false">
+		
+			<icons>
+				<icon name="f_btn" size="(11,11)">
+					a65e5e16161616164e0e4e474e0e460e060e460e
+					060e4c060c060c060c060c060c060c060c060c06
+					0c060c06040c040c040c040c040c04060c0c0406
+					0c0c040c0c0c040c040c040c040c040c040c040c
+					040c040c040c070c040c040c040c040c0407040c
+					0c0c040c040c0707070c040c040c040c040c040c
+					04
+				</icon>
+
+				<icon name="c_btn" size="(11,11)">
+					040b040b0404040404040403040b040b040b040b
+					040b040b040b040b0404040404030403040b040b
+					040b040b040b040b040b040b04040403040b0403
+					040b040b040b040b040b040b040b040b040b0403
+					0b0b0403040b070b040404440404040404070444
+					0c440c440c440707074c461446144c14464c4c4c
+					46
+				</icon>
+
+				<icon name="b_btn" size="(11,11)">
+					0b0404040404040404040404030b0b0403040b04
+					03040b040b040b040b040b040b0b0304030b0304
+					030b03040b040b040b040b040b040b0b030b0304
+					030b030b030b0b040b040b040b040b040b0b0b04
+					030b0304030b07040b040b040b040b040b070b04
+					030b0304030b0707070b04044404040444040404
+					0b
+				</icon>
+			
+				<icon name="windowid" size="(13,12)">
+					5b5b5b5b5b5b5b5b5b5b5b5b5b9b525b5b9b525b
+					5b9b525b5b9b5b5b5b5b5b5b5b5b5b5b5b5b5b9b
+					5b9bff9b5b9b5b9bff9b5b9b5b5b5bffff5b5b5b
+					ffff5b5b5b9b5b9b5bffff5bffff5b9b5b9b5b5b
+					5b5b5bffffff5b5b5b5b5b9b5b9b5b9b5bff5b9b
+					5b9b5b9b5b5b5b5b5b5b5b5b5b5b5b5b5ba45bff
+					ffffffffffffffff5ba45b5bffffffffffffffff
+					ff5b5b9b5ba45b9b5ba45b9b5b9b5b9b
+				</icon>
+				
+				<icon name="purple1" size="(11,11)">
+					4c5b145c16245e24165c141c16241e265e26165c
+					14141c245e245e5c4e5c4c4c0c261e265e244e1c
+					14144c4c5e24165c145b4c4c0c134426165c4e14
+					14144c144c1314144c130c130c134413045c1414
+					4c130c4c0c1307134c130c4c0c130c1304074414
+					4c134c4c4c1307070713441304134413044b044b
+					04
+				</icon>
+				<icon name="purple2" size="(11,11)">
+					0c130c130c130c130c130c0b0413040b04130413
+					041304130c130c1304130c130c13040b0413040b
+					041304130c130c1304130c130c130c0b0b0b0b0b
+					0b0b0b0b0b0b04130413041304130413040b0b0b
+					0b0b040b0b0b040b041304130413041304130c0b
+					0b0b0b0b0b0b0b0b0b0b0b13040b0b0b04130413
+					04
+				</icon>
+				<icon name="purple3" size="(11,11)">
+					144c144c144c144c4c4c14141414141414141414
+					141413444c0c4c0c4c0c130c4c0c134c144c134c
+					144c134c130c130c4c0c130c130c130c4c4c134c
+					144c144c134c13441344134413441344130c130c
+					4c4c130c130c070c13041344130413441307130c
+					130c130c130c0707070c4b4413044b444b044b44
+					13
+				</icon>
+				<icon name="purple4" size="(11,11)">
+					04130c1304130c1304130c0b0413040b0b13040b
+					04130c1304130c130c130c13040b0b0b0b0b0b0b
+					0b0b040b0413041304130c130413040b0b0b040b
+					0b0b040b0b0b04130413041304130c13040b0b0b
+					0b0b0b0b0b0b070b041304130413041304070c0b
+					0b0b0b0b0b0b0707070b041304130c1304130413
+					04
+				</icon>
+				<icon name="purple5" size="(11,11)">
+					4b044b4b4b044b4b4b044b0413441304130c1304
+					130c4b0b4b0b4b4b4b044b4b4b44134413441304
+					134413044b0b4b4b4b044b4b4b044b0413441304
+					13441304130c4b0b4b4b4b4b4b0b4b4b4b4b1344
+					134b1344134407044b0b4b4b4b4b4b4b4b074b04
+					134413441344070707444b0b4b0b4b0b4b4b4b4b
+					4b
+				</icon>
+				<icon name="purple6" size="(11,11)">
+					0808080908080809080108010101010101010101
+					0101080909090809090908090801000101010001
+					0101010108080809080808090801080101010101
+					0101010101010909090908090909090209010101
+					0101000101010101010808090808080909080801
+					0101010101010101010108090908080909090902
+					09
+				</icon>
+				<icon name="purple7" size="(11,11)">
+					0101010101010101400101410909094109090841
+					0809010108010101080101010809090909090941
+					0909080901010101010101010101014109090941
+					0909084109090101080101010801010108090909
+					0909090909090709010101010101010101070141
+					0909084109090707070901010801010108010101
+					08
+				</icon>
+				<icon name="purple8" size="(11,11)">
+					0909090909090909090909010908080109080801
+					0908090909090909090909090908090909080809
+					0908090909090909090903090909090809080809
+					0908080109080909090909090909090909090909
+					0909090909090909090903090909030909090309
+					0908080909090909090903090909090909090309
+					09
+				</icon>
+				<icon name="purple9" size="(11,11)">
+					0101010101010101010101080108410841084108
+					0908010101010108010101080108090909090909
+					0909090901010101010101010101010841084109
+					0908410909080101010101080101010801080909
+					0908410909080709010101010101010101070108
+					4108410809080707070801010101010801010108
+					01
+				</icon>
+				<icon name="purple10" size="(11,11)">
+					0101010101010101010108000000000000000001
+					0000010101010101010101010100000000000001
+					0000000101010101010108010101080000000000
+					4000000000000101010101010101010101000001
+					0000000100000701010101010101080101070801
+					0000000000000707070001010101010101010101
+					01
+				</icon>
+									
+				<icon name="chair1empty" size="(11,11)">
+					1c1d241e251e251d1c151c155d1d641d5c151c14
+					140c651e251d1d151c151414141e5d1d1c141414
+					140c130c1d1d1c1514141414141414151414140c
+					130c130c130c1c1414141414140c140c1314140c
+					140c130c130c130c14141414141414141314140c
+					130c130c13041304130c130c130c1414130c130c
+					13
+				</icon>
+				<icon name="chair2empty" size="(11,11)">	
+					130c130c130c1304130c130c130c130c130c130c
+					14141304130c1304130c130c1314130c130c130c
+					1314130c120b0b0b120b0b0b130b0b0c130c130c
+					130c130c130c0b0b120b0b04130b0b04130c130c
+					130c130c130c130c0b0b0b0b0b0b0b0b0b0b0b13
+					130413131304130c130c0b0b120b0b0b120b0b04
+					13
+				</icon>
+				<icon name="chair3empty" size="(11,11)">	
+					141414140d141514141414130c14141414140c13
+					14141414141414141414141414130c130c140c13
+					14140c131414141414141414141414130c130c13
+					0c130c130c131414141414141414141414130c13
+					0c130c130c130c130c130c1414140c1414140c13
+					0c1304130c130c130c130c130c130c130c130c13
+					0c
+				</icon>
+				<icon name="chair4empty" size="(11,11)">			
+					130c13041313130c130c130c130c130c130c130c
+					130c0b0b120b0b0b130b0b04130c130c130c130c
+					130c130c120b0b04130b0b04130b130c130c130c
+					130c130c130c0b0b120b0b0b0b0b0b041204130c
+					130c130c130c130c120b0b0b120b0b0b120b130c
+					130c130c130c130c130c0b0b0b0b0b0b120b0b0b
+					0b				
+				</icon>
+				<icon name="chair5empty" size="(11,11)">			
+					0c130c130c130c140c130c0b0b0b0b120b0b0413
+					0b130c130c130c130c130c130c0b0b120b0b0413
+					130b04130c130c130c130c130c130c0b0b0b0b0b
+					0b0b0b0b0b0b13130c1313130c130c130c0b0b12
+					0b0b0b120b0b0b1204130c130c130c130c130c0b
+					0b0b0b0b0b0b0b120b0b1313041313130c130c13
+					0c
+				</icon>
+				<icon name="chair6empty" size="(11,11)">		
+					0809090908090908080909010001010100010101
+					0101080808090808080908010801010101010101
+					0101010108090909080909090809080100010101
+					0001010101010808080908080809080108010101
+					0101010101010101090909090809090909020901
+					0101010100010101010101080809080808090908
+					08
+				</icon>
+				<icon name="chair7empty" size="(11,11)">			
+					0202020202020209020202090209020902090908
+					0209020a02020202020202020208090802080908
+					0901090802020202020202090202020902090908
+					02090908020902020202020a0202020202080908
+					0201090802080908020202020202020902020209
+					020902090209090802090a0a02020a0a0202020a
+					02
+				</icon>
+				<icon name="chair8empty" size="(11,11)">			
+					09020902090209020902090a0a020a0a0a0a0a0a
+					0a0209020202090202020902020a0a0a0a0a0a0a
+					0a0a0a0a09020902020209020902090a0a0a0a0a
+					0a0a0a0a0a0a02020202020202020202020a0a0a
+					0a0a0a0a0a0a0a0a0202090202020202020a020a
+					0a0a0a0a0a0a0a0a0a0a0a02020a0202020a0a02
+					02
+				</icon>
+				<icon name="chair9empty" size="(11,11)">			
+					0902090209020902090209090809080909090802
+					090909020202020202020a020201080908090809
+					0809080209020902020209020202090908090802
+					0909080209090902020209020202090202010809
+					0809080901090802090209020902090202020909
+					0809080209090802090909020202020202020202
+					02
+				</icon>
+				<icon name="chair10empty" size="(11,11)">			
+					0101010101010101010101010808010101080901
+					0108010101010101010101010108090808080909
+					0908090901010101010101010100010101080901
+					0108090101080101010101010101010101080901
+					0808090908080909010101010101010101010101
+					0808090108080901080801010101010101010101
+					01
+				</icon>
+				
+				<icon name="tok1" size="(11,11)">
+					afb7aeaeadaeaeaeb6beb7b6b7b652000064a452
+					09a1b7f7b7630000b6beb75200f6b6f65b0000b6
+					b6f6ad00b7f7b7a30000aef7b7ae00f6b7f65b00
+					00b6b6f6ae00b7f7b75b0000b6beb75b00f6b6b6
+					49000063a45b005bb7f6aeaeadaeaeaeb6beb7b7
+					b7b7b7f6b7f7b7f6b7f7b7bfb7bfb7bfb7bfb7bf
+					b7
+
+					49000063a45200a0b7f6aeaeadaeaeaeb6beb7b7
+					49000063a45b005bb7f6aeaeadaeaeaeb6beb7b7
+					
+				</icon>	
+				<icon name="tok2" size="(11,11)">
+					afaeadadadaeadb5b6b6b6bdaf5a000064645210
+					5bb6b6fd5c0000b5b6b6120009b7b7620000b6be
+					b7ad0000b6b6540000b5b6b6ad0000bdb75b0000
+					afb7b7b40000b6bd530000b5b6b6530001b7b652
+					0000646c54095bb6afaeadadadaeadb5b6b6b6be
+					6fbeb7b7b7b7b7beb7beb7beb7b777b7b7b777be
+					b7
+				</icon>	
+				<icon name="tok3" size="(11,11)">
+					afb6af5a00005da4520a5bbeb7b75c0000b6b7be
+					1300b6b6b65b0000aeb6b6ac00b7b7bd5b0000b6
+					b6b7ae00b6b6b65b0000aefdb6ae00beb7b75300
+					00b6b7be5400b6b6ae50000064ab53095bb7b6b5
+					aeb5aeb4aeb6b7bdb7b76fbdb7b7b7b7b7b7b7b7
+					b7beb7bf77be77bf77be5dadafb7b7beb7beb7be
+					b7
+				</icon>	
+				<icon name="tok4" size="(11,11)">
+					5b592324ac66ae66635c21a4aeafb6b6f6b7b6b7
+					b6aeb7aeb6adb6aeb6b6beb7beb7b652000064a4
+					5209a1b6f7b7630000b6beb7520049b6f65b0000
+					b6b6f6ad0000f7b7a30000b6f7b7b60000b7f65b
+					0000b6b6f6ae0000f7b75b0000b6beb75b0009b6
+					b649000063a45200a0adf6aeb6adb6aeb6b6beb7
+					f7
+				</icon>	
+				<icon name="tok5" size="(11,11)">
+					6eb6aeaeadb4adaeaffdb6b6b7b6540000646453
+					0a62b6b6b6620000aeb6b65200bdb7b75b0000b6
+					b7bd6600b6b6b65b0000aeb6b6ad00b7b7be5b00
+					00b6b7b7ae00b6b6b6580000aeb6b65900bdb6b6
+					11000064655b095b6fb6adaeadb4adaeaffdb6be
+					77b7b7beb7beb7b7b7beafb7b7b7b7b7b7b7b7b7
+					b7
+				</icon>	
+				<icon name="tok6" size="(11,11)">
+					aeafbdae59000064a4524976b7b7be5c0000b6b7
+					b712b5b6b6b65b0000aeb6b6acb7bdb6b75b0000
+					b6b7bdaeb6b6fdb65b0000aeb6b6b4b7b7b7be54
+					0000b6b7b753b6b6b6ae5000005caa530877b7af
+					b5aeb5aeb5aeb6b7b7b7beafb7b7fdb7b7b7b766
+					b7b7bfb7be77bf77be775b64adafb7b7beb7beb7
+					be
+				</icon>	
+				<icon name="tok7" size="(11,11)">
+					76b5aeb5aeb5aeb6b7bdb7b6ae5a000064a4520a
+					54b6b7b75c0000b6b7be13000ab6b65b0000aeb6
+					b6ac0000b7bd5b0000b6b7b7ae0000b6b65b0000
+					aeb6b6ae0000b7b7530000b6b7be540008b6ae50
+					000064ab53095bb5b6b4aeb5aeb5aeb6b7bdb7b7
+					6fbeb7b7b7fdb7b7b7beb7beb7bf77be77bf77be
+					be
+				</icon>	
+				<icon name="tok8" size="(11,11)">
+					afb6ae5800005ca3520a54bdb7b75c0000b6b7bd
+					1200b6b6b65b0000aeb6b6ac00b7b7be5b0000b6
+					b7b7ae00b6b6b65b0000aeb6b6ae00bdb6b75300
+					00b6b7bd5300b6fdae50000064ab53405bb7b6b5
+					aeb5aeb5aeb6b7beb7b7afb6b7b7b6b6b7b7b6b6
+					b7beb7be77be77be77be5dadafb7b7bfb7beb7be
+					b7
+				</icon>	
+				<icon name="tok9" size="(11,11)">
+					6eb6aeb4adaeadadaeb6b6b6b7b6530000646458
+					0a5bb6b6b6620000aeb6b65200b7b7bd5b0000b6
+					b6b76d00b6b6b65b0000affdb6ae00beb7b75b00
+					00b6b7beae00b6b6b6590000aeb6b65900bdb7b6
+					11000064655a0861afb6adb4adaeadadaeb6b6bf
+					77b7b7beb7b7b7beb7beafb7b7b7b7b7b7b7b7b7
+					b7
+				</icon>	
+				<icon name="tok10" size="(11,11)">
+					b5aeaeadadadaeaeb6b6b6b7b65300006464530a
+					61afb6b6630000aeb6b6520049b7b75b0000b6b7
+					be6d0000b6b65b0000aeb6b6ad0000b7bd5b0000
+					b6b6b7ae0000b6b65a0000affdb6590040b7b611
+					000064655b0907b6b5adaeadadadaeaeb607b777
+					b7b7beb7b7b707070777b7b7beb7b777b7b7b7b7
+					bf
+				</icon>	
+			</icons>
+			
+			<data>
+				<field name="p0_name" type="text" mask="(.*)"/>
+				<field name="p1_name" type="text" mask="(.*)"/>
+				<field name="p2_name" type="text" mask="(.*)"/>
+				<field name="p3_name" type="text" mask="(.*)"/>
+				<field name="p4_name" type="text" mask="(.*)"/>
+				<field name="p5_name" type="text" mask="(.*)"/>
+				<field name="p6_name" type="text" mask="(.*)"/>
+				<field name="p7_name" type="text" mask="(.*)"/>
+				<field name="p8_name" type="text" mask="(.*)"/>
+				<field name="p9_name" type="text" mask="(.*)"/>
+
+				<field name="p0_money" type="text" mask="\$(.*(\..*)?)"/>
+				<field name="p1_money" type="text" mask="\$(.*(\..*)?)"/>
+				<field name="p2_money" type="text" mask="\$(.*(\..*)?)"/>
+				<field name="p3_money" type="text" mask="\$(.*(\..*)?)"/>
+				<field name="p4_money" type="text" mask="\$(.*(\..*)?)"/>
+				<field name="p5_money" type="text" mask="\$(.*(\..*)?)"/>
+				<field name="p6_money" type="text" mask="\$(.*(\..*)?)"/>
+				<field name="p7_money" type="text" mask="\$(.*(\..*)?)"/>
+				<field name="p8_money" type="text" mask="\$(.*(\..*)?)"/>
+				<field name="p9_money" type="text" mask="\$(.*(\..*)?)"/>
+				
+				<field name="bet" type="text" mask="\$(.*(\..*)?)"/>
+				<field name="pot" type="text" mask="\$(.*(\..*)?)"/>
+				<field name="rake" type="text" mask="\$(.*(\..*)?)"/>
+				
+				<field name="hand_no" type="text" mask="(.*)"/>
+				
+				<field name="imback" type="text" mask="(.*)"/>
+
+				<chat name="status" chatfile="houses/pokerroom.com/table.chat"/>
+			</data>
+			
+			<window position="(0,0)" size="(794,600)" find="fixed">
+				<verify icon="windowid" offset="(3,3)" mode="require"/>
+				<anchor name="root" offset="(0,-18)"/>
+				<close offset="(784,9)"/>
+			</window>
+	
+			<styles>
+				<style name="yellow" ol="0,0,0" fg="7,7,0" tol="0" font="pokerroom.com"/>
+				<style name="chat" fg="7,7,3" tol="1" font="pokerroom.com-status"/>
+				<style name="bold_chat" fg="7,7,3" tol="1" font="pokerroom.com-status-bold"/>
+				<style name="white" ol="0,0,0" fg="7,7,3" tol="1" font="pokerroom.com"/>
+				<style name="big" fg="7,7,3" tol="1" font="pokerroom.com-lg"/>
+				<style name="dtok" fg="0,0,0" tol="0" font="dtok"/>
+				<style name="buttons" fg="5,5,2" tol="2" font="pokerroom.com-buttons"/>
+			</styles>
+			
+			<components anchor="root">
+				
+				<label target="p0_name" offset="(13,108)" size="(150,14)" style="white"/>
+				<label target="p0_money" offset="(13,122)" size="(150,14)" style="white"/>
+				
+				<label target="p1_name" offset="(193,41)" size="(150,14)" style="white"/>
+				<label target="p1_money" offset="(193,55)" size="(150,14)" style="white"/>
+				
+				<label target="p2_name" offset="(345,41)" size="(150,14)" style="white"/>
+				<label target="p2_money" offset="(345,55)" size="(150,14)" style="white"/>
+				
+				<label target="p3_name" offset="(518,41)" size="(150,14)" style="white"/>
+				<label target="p3_money" offset="(518,55)" size="(150,14)" style="white"/>
+				
+				<label target="p4_name" offset="(675,90)" size="(115,14)" style="white"/>
+				<label target="p4_money" offset="(675,104)" size="(115,14)" style="white"/>
+				
+				<label target="p5_name" offset="(672,445)" size="(120,14)" style="white"/>
+				<label target="p5_money" offset="(672,459)" size="(120,14)" style="white"/>
+				
+				<label target="p6_name" offset="(498,445)" size="(150,14)" style="white"/>
+				<label target="p6_money" offset="(498,459)" size="(150,14)" style="white"/>
+				
+				<label target="p7_name" offset="(344,445)" size="(150,14)" style="white"/>
+				<label target="p7_money" offset="(344,459)" size="(150,14)" style="white"/>
+				
+				<label target="p8_name" offset="(142,445)" size="(150,14)" style="white"/>
+				<label target="p8_money" offset="(142,459)" size="(150,14)" style="white"/>
+				
+				<label target="p9_name" offset="(12,438)" size="(128,14)" style="white"/>
+				<label target="p9_money" offset="(12,452)" size="(128,14)" style="white"/>
+				
+				<label target="hand_no" offset="(698,40)" size="(94,13)" style="yellow"/>
+
+				<button name="sit_out" offset="(50,495)"/>
+				<button name="leave" offset="(50,522)"/>
+				<button name="lobby" offset="(50,546)"/>
+				<button name="cashier" offset="(50,575)"/>
+				<button name="ok" offset="(308,557)"/>
+				
+				<area name="tok1" offset="(168,239)" size="(25,25)"/>
+				<area name="tok2" offset="(229,217)" size="(25,25)"/>
+				<area name="tok3" offset="(391,215)" size="(25,25)"/>
+				<area name="tok4" offset="(545,213)" size="(25,25)"/>
+				<area name="tok5" offset="(617,247)" size="(25,25)"/>
+				<area name="tok6" offset="(620,295)" size="(25,25)"/>
+				<area name="tok7" offset="(532,310)" size="(25,25)"/>
+				<area name="tok8" offset="(385,313)" size="(25,25)"/>
+				<area name="tok9" offset="(219,315)" size="(25,25)"/>
+				<area name="tok10" offset="(148,289)" size="(25,25)"/>
+				
+				<area name="chair1" offset="(38,157)" size="(11,11)"/>
+				<area name="chair2" offset="(233,114)" size="(11,11)"/>
+				<area name="chair3" offset="(389,113)" size="(11,11)"/>
+				<area name="chair4" offset="(547,124)" size="(11,11)"/>
+				<area name="chair5" offset="(733,165)" size="(11,11)"/>
+				<area name="chair6" offset="(736,415)" size="(11,11)"/>
+				<area name="chair7" offset="(557,467)" size="(11,11)"/>
+				<area name="chair8" offset="(387,466)" size="(11,11)"/>
+				<area name="chair9" offset="(210,467)" size="(11,11)"/>
+				<area name="chair10" offset="(44,410)" size="(11,11)"/>
+				
+				<area name="a_sitin" offset="(29,490)" size="(43,13)"/>
+				<area name="a_leave2" offset="(29,516)" size="(47,13)"/>
+				<area name="a_lobby" offset="(28,543)" size="(48,12)"/>
+				<area name="a_cashier" offset="(20,569)" size="(64,14)"/>
+				<area name="a_ok" offset="(294,550)" size="(28,14)"/>
+				<area name="a_leave1" offset="(353,549)" size="(39,13)"/>
+				<area name="a_deposit" offset="(412,551)" size="(51,13)"/>
+				<area name="a_cb_apba" offset="(219,526)" size="(16,16)"/>
+				<area name="a_cb_wfbb" offset="(221,544)" size="(14,16)"/>
+				<area name="a_f_btn" offset="(145,485)" size="(11,11)"/>
+				<area name="a_c_btn" offset="(255,488)" size="(11,11)"/>
+				<area name="a_b_btn" offset="(360,486)" size="(11,11)"/>
+				
+				<label target="imback" offset="(12,488)" size="(74,13)" style="buttons"/>
+
+				<label target="bet" offset="(188,572)" size="(60,16)" style="big"/>
+				<label target="pot" offset="(279,572)" size="(76,16)" style="big"/>
+				<label target="rake" offset="(395,572)" size="(83,16)" style="big"/>
+				
+				<label target="status" offset="(520,489)" size="(255,12)" lines="6" style="chat"/>
+				
+				<button name="fold" offset="(183,492)"/>
+				<button name="check/call" offset="(290,492)"/>
+				<button name="bet/raise" offset="(395,492)"/>
+				
+			</components>
+			
+		</screen>
+		
+		<screen name="lobby" auto="false" loadtime="5">
+			
+			<icons>
+				<icon name="windowid" size="(13,12)">
+					5b5b5b5b5b5b5b5b5b5b5b5b5b9b525b5b9b525b
+					5b9b525b5b9b5b5b5b5b5b5b5b5b5b5b5b5b5b9b
+					5b9bff9b5b9b5b9bff9b5b9b5b5b5bffff5b5b5b
+					ffff5b5b5b9b5b9b5bffff5bffff5b9b5b9b5b5b
+					5b5b5bffffff5b5b5b5b5b9b5b9b5b9b5bff5b9b
+					5b9b5b9b5b5b5b5b5b5b5b5b5b5b5b5b5ba45bff
+					ffffffffffffffff5ba45b5bffffffffffffffff
+					ff5b5b9b5ba45b9b5ba45b9b5b9b5b9b
+				</icon>
+			</icons>
+
+			<data>
+				<list name="tables">
+					<field name="name" type="text" id="true"/>
+					<field name="type" type="state" mask="Play|Real"/>
+					<field name="limit" type="text" mask="\$(.*)-\$(.*)"/>
+					<field name="fill" type="text" mask="(.*)/(.*)"/>
+					<field name="hph" type="text" mask="(.*)"/>
+					<field name="pot" type="text" mask="(.*)"/>
+					<field name="ppf" type="text" mask="(.*)"/>
+				</list>
+		
+				<list name="seated">
+					<field name="name" type="text"/>
+					<field name="cash" type="text" mask="\$(.*(\..*)?)"/>
+					<field name="delay" type="text"/>
+				</list>
+				
+				<field name="info" type="text"/>
+				<field name="seated_check" type="text"/>
+				
+				<field name="myname" type="text"/>
+				<field name="myplay" type="text" mask="\$(.*(\..*)?)"/>
+				<field name="myreal" type="text" mask="\$(.*(\..*)?)"/>
+				
+				<field name="hph" type="text"/>
+				<field name="ppf" type="text" mask="(.*)%"/>
+				<field name="pot" type="text" mask="\$(.*(\..*)?)"/>
+				
+				<chat name="lobby_chat" chatfile="houses/pokerroom.com/lobby.chat"/>
+			</data>
+			
+			<window position="(0,0)" size="(683,554)" find="fixed">
+				<verify icon="windowid" offset="(3,3)" mode="require"/>
+				<anchor name="root" offset="(-10,33)"/>
+				<close offset="(672,9)"/>
+			</window>
+	
+			<styles>
+				<style name="black" fg="0,0,0" tol="0" font="pokerroom.com-status"/>
+				<style name="white" fg="7,7,3" tol="1" font="pokerroom.com-status"/>
+				<style name="red" fg="4,1,0" tol="3" font="pokerroom.com-status"/>
+				<style name="bold_black" fg="0,0,0" tol="0" font="pokerroom.com-status-bold"/>
+				<style name="bold_white" fg="7,7,3" tol="0" font="pokerroom.com-status-bold"/>
+			</styles>
+			
+			<components anchor="root">
+			
+				<button name="play_money" offset="(155,70)"/>
+				<button name="micro" offset="(43,87)"/>
+				<button name="low" offset="(101,87)"/>
+				<button name="medium" offset="(168,87)"/>
+				<button name="high" offset="(234,87)"/>
+				<button name="speak" offset="(339,434)"/>
+				<button name="goto" offset="(319,323)"/>
+				<button name="speak_box" offset="(31,435)"/>
+				<button name="SAFE" offset="(789,590)"/>
+				
+				<label target="info" offset="(390,310)" size="(180,12)" lines="5" style="black"/>
+				<label target="seated_check" offset="(431,109)" size="(135,15)" style="bold_white"/>
+
+				<label target="myname" offset="(60,460)" size="(118,15)" style="red"/>
+				<label target="myplay" offset="(385,460)" size="(94,15)" style="red"/>
+				<label target="myreal" offset="(242,460)" size="(77,15)" style="red"/>
+				
+				<label target="hph" offset="(455,389)" size="(100,12)" style="black"/>
+				<label target="pot" offset="(455,401)" size="(100,12)" style="black"/>
+				<label target="ppf" offset="(455,413)" size="(100,12)" style="black"/>
+			
+				<grid target="tables" offset="(23,125)" width="332" delta="16" sep="1" rows="11">
+
+					<style name="selected" fg="7,7,3" tol="1" font="pokerroom.com-status"/>
+					<style name="default" fg="0,0,0" tol="0" font="pokerroom.com-status"/>
+
+					<columns>
+						<label target="name" offset="(0,0)" size="(148,15)"/>
+						<label target="type" offset="(149,0)" size="(43,15)"/>
+						<label target="limit" offset="(192,0)" size="(93,15)"/>
+						<label target="fill" offset="(285,0)" size="(47,15)"/>
+					</columns>
+
+					<scrollbar offset="(334,0)" width="13" scroll_top="24" scroll_height="138"/>
+				</grid>
+				
+				<grid target="seated" offset="(385,125)" width="290" delta="16" sep="1" rows="10">
+					<style name="default" fg="0,0,0" tol="0" font="pokerroom.com-status"/>
+					<columns>
+						<label target="name" offset="(0,0)" size="(184,15)"/>
+						<label target="cash" offset="(185,0)" size="(63,15)"/>
+						<label target="delay" offset="(249,0)" size="(40,15)"/>
+					</columns>
+				</grid>
+				
+				<label target="chat" offset="(22,347)" size="(323,14)" lines="5" style="chat"/>
+				
+			</components>
+		</screen>
+
+	</screens>
+</house>

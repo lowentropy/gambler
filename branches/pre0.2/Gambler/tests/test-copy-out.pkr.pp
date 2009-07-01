@@ -1,0 +1,6 @@
+actions := true
+copy(N, X) := false
+{	X_ in [N_] -> true
+}N_ in [3_]:
+{	copy(N, O) -> print O
+}exit

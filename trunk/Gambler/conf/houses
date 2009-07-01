@@ -1,0 +1,2 @@
+pokerroom.com,poker.server.session.house.impl.XmlHouseLoader
+test,poker.server.session.house.TestHouse

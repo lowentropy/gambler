@@ -1,0 +1,126 @@
+TESTING
+
+- unit test for poker.server.base.impl.Profile
+	- NOTES: you construct with name of player, whether you've
+		     seen that player before or not. the two main methods
+		     on Profile are addEstimate and getStyle, which should
+		     work on fresh objects with two behaviors: if no file
+		     profiles/<name>.profile exists, the default is initialized
+		     and returned; otherwise it is loaded (first time only),
+		     and stored values returned. the save method should save
+		     modified profiles to that file. the load method is used
+		     internally but is also public (calling will overwrite
+		     any changes).
+	- THINGS TO TEST:
+		- behavior after constructor call (as above)
+		- merging of distributions (ask low)
+		- save/restore works
+			- normal/abnormal conditions
+			- check isLoaded()/isModified())
+			- check static load too (getName() after load..)
+		- getHistoryAverage
+		- toString()
+- unit test for HandDist
+	- good luck!!
+
+BUGS
+
+- too-fast showdown msgs skip sitin(), unknown
+  players screw up intial and post- positioning
+  	- not much to do about it, messages are just
+  	  faster now
+  	- graphical sitins should be included in the
+  	  table, but if their name is skipped in
+  	  actions they should be folded
+  	- task on this done, not tested
+  
+TODO
+
+- if opp doesn't show down, take out seven cards
+  from each hand dist, normalize each, then avg,
+  and add that as flat estimate
+- add in a reset-fail if none-found enough times
+- test play-money profitability
+- test multiple appletviewers
+- start making money, freeze alpha
+- update all javadocs
+- write simulation framework
+- write more unit tests
+- freeze beta when appropriate, then
+  choose best $ version for 0.1
+- freeze, begin work on 0.2 (see doc/plans)
+
+TODO ON ROADMAP:
+
+E:
+	...
+	online test, supervised but automatic
+	observe at low usage for some period
+	put into production for pokerroom.com
+	review log data
+
+F:
+	write overall control applet & stat view
+	find other online poker rooms
+	write house profiles and test individually as in B
+	keep each house under supervision levels until confirmed
+	add each to control list via applet once reviewed
+
+G:
+	minimal randomness criterion:
+		5 sim tables / house
+		8 hours/day / house
+		(3 minimum houses for 24hr coverage)
+	optimal randomness criterion:
+		2-3 sim tables / house
+		3-5 hrs/day / house
+		(9 minimum houses for 24hr coverage)
+
+FULL ROADMAP
+
+A:
+	test gambler with table state test methods
+
+B:
+	test region update messages on lobby, table
+	test language against lobby, table
+
+C:
+	for given house profile:
+	test table state class when connected to update messages
+	test end-to-end control structure for pre-production
+	via hand shows, develop map for bias observation
+
+D:
+	write supervised online real-money gamlber test code
+	test via this code for hour-long continuous chunks, dynamic table selection
+	collect results and run them by justin
+	update networks with results and justin's advice
+	retest supervised gambler
+
+E:
+	write log server
+	test log server for supervised gambler
+	retest end-to-end-control structures
+	online test, supervised but automatic
+	observe at low usage for some period
+	put into production for pokerroom.com
+	review log data
+
+F:
+	write overall control applet & stat view
+	find other online poker rooms
+	write house profiles and test individually as in B
+	keep each house under supervision levels until confirmed
+	add each to control list via applet once reviewed
+
+G:
+	minimal randomness criterion:
+		5 sim tables / house
+		8 hours/day / house
+		(3 minimum houses for 24hr coverage)
+	optimal randomness criterion:
+		2-3 sim tables / house
+		3-5 hrs/day / house
+		(9 minimum houses for 24hr coverage)
+	

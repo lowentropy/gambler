@@ -1,0 +1,98 @@
+preAction:
+	tc = amtToCall
+	pair >= T: raise
+	pair: call
+	X,Y >= T:
+		suited: raise
+		else: call
+	XYs:
+		conn: call
+		A2: raise
+		AX: call
+	5%: call
+	checkfold
+
+postAction:
+	np = numActive
+	tc = amtToCall
+	P0 = tc / (pot + tc)
+	HRN = handRank(c1, c2, board, np-1)
+	PPOT = 0
+	rnd < RIVER?
+		PPOT = ppot1(c1, c2, board)
+	nc = numoppingame
+	HRN == 1.0: raise
+	tc == 0?
+		rand < HRN**2: bet
+		rand < PPOT: bet
+		check
+	else:
+		rand < (HRN ** numRaises+1): raise
+		(HRN**2)*pot > tc || PPOT > P0: call
+		checkfold
+
+ppot1(c1,c2,h):
+	HP = double[3][3]
+	HPT = double[3]
+	int ur7, or, idx, ur5 = rank(c1,c2,h)
+	d = deck - c1 - c2 - h
+	for o1 in d:
+		for o2 in d past o1:
+			or = rank(o1,o2,h)
+			if (ur5 > or) idx = AHEAD
+			el (ur5 == or) idx = TIED
+			el idx = BEHIND
+			HPT[idx]++
+			for k in d-o1-o2:
+				h += k
+				ur7 = rank(c1,c2,h)
+				or = rank(o1,o2,h)
+				if (or7 > or) HP[idx][AHEAD]++
+				el (or7 == or) HP[idx][TIED]++
+				el HP[idx][BEHIND]++
+				h -= k
+	ppot = npot = 0
+	d1 = 45 * (HPT[B] + HPT[T]/2)
+	d2 = 45 * (HPT[A] + HPT[T]/2)
+	if (d1 > 0)
+		ppot = (HP[B][A]+HP[B][T]/2+HP[T][A]/2) / d1
+	if (d2 > 0)
+		npot = (HP[A][B]+HP[A][T]/2+HP[T][B]/2) / d2
+	return ppot
+	
+handRank(c1, c2, h, np):
+	hr = handRank(c1, c2, h)
+	return hr ** np
+
+handRank(c1, c2, h):
+	my = h
+	xx = h
+	my += c1 + c2
+	myr = rank(my)
+	d = deck
+	good = bad = tied = 0
+	d -= my
+	for c1 in d:
+		xx += c1
+		for c2 in d past c1:
+			xx += c2
+			if my > xx:
+				good ++
+			else if my < xx:
+				bad ++
+			else
+				tied ++
+			xx -= c2
+		xx -= c1
+	return (good + tied/2) / (good + bad + tied)
+	
+rank(h):
+	nopair: top5
+	1pair: pc, top4
+	2pair: hpc, lpc, top3
+	set: setc, top2
+	str8: stop1
+	flush: ftop5
+	full: hfh, lfh
+	4kind: 4ktop, top1
+	sflush: stop1

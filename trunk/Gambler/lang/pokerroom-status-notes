@@ -1,0 +1,63 @@
+hit bold <, read till >, is player name, then read till non-bold or next \n<, is player chat
+
+after cmd,
+hit 'Dealing', then
+	hit 'Flop:[', read 3 cards w/ ',', then ']'
+	hit 'Turn:[', read card, then ']'
+	hit 'River:[', read card, then ']'
+hit '------Startinghand#', read handnum, then ']------'
+
+otherwise, read playername until
+'calls' then amount then .
+'bets' then amount then '.'
+'folds.'
+'checks.'
+'raisesto' then amount then .
+',it'syourturntoact!Pleasehurryup.'
+'shows' then hand then .
+'wins' then amount, then
+	'with' and hand then '.', or
+	'.'
+'joinsthetable'
+'isstandingbytoenterthegame.'
+'sitsin.'
+'sitsout.'
+
+a hand is
+'twopairs,', an mval, then 'and' and an mval
+'three' and an mval
+'four' and an mval
+'astraight,' an mval, then 'high'
+
+
+which means.....
+
+
+b: <PLAYER>*
+s: PLAYER calls $X.
+s: PLAYER bets $X.
+s: PLAYER raises to $X.
+s: PLAYER folds.
+s: PLAYER checks.
+
+s: Dealing Flop: [Vs, Vs, Vs]
+s: Dealing Turn: [Vs]
+s: Dealing River: [Vs]
+
+s: ------ Starting hand #[num|,] ------
+s: PLAYER, it's your turn to act! Please hurry up.
+
+s: PLAYER shows HAND.
+s: PLAYER wins $X with HAND.
+s: PLAYER wins $X.
+
+s: PLAYER joins the table   NO PERIOD
+s: PLAYER is standing by to enter the game.
+s: PLAYER sits in.
+s: PLAYER sits out.
+
+HAND:
+
+two pairs, Xs and Ys
+three Xs
+a straight, X high

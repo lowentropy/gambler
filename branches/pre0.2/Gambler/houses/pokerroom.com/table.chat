@@ -1,0 +1,115 @@
+~~ player:*
+~~ text:*
+~~ number:number
+~~ amount:money
+~~ card:card
+~~ longnum:[0-9,]+
+~~ nb_player:[^>]+
+
+~~chat
+<player:p> has gone all-in because of connection problems.						~ allin(p)
+<player>, you will be sat out after this hand and may then leave.				~ ignore()
+<player> declared abusive and will be booted after this hand finishes.			~ ignore()
+<player> has disconnected but is not allowed to go all-in.						~ ignore()
+<player> has disconnected and has all-in protection.							~ ignore()
+<player> returns.																~ ignore()
+<player:p> hasn't acted but is still connected and will be <passive_action:a>.	~ ignore()
+<player> has been disconnected and is given 30 seconds to reconnect.			~ ignore()
+<player:p> leaves the table.													~ notattable(p)
+<player:p> calls <amount:m>.													~ action(p,CALL,m)
+<player:p> folds.																~ action(p,FOLD)
+Dealing flop [<card:a>, <card:b>, <card:c>]										~ deal(FLOP,a,b,c)
+Dealing turn [<card:c>]															~ deal(TURN,c)
+Dealing river [<card:c>]														~ deal(RIVER,c)
+<player:p> joins the table.														~ attable(p)
+<player:p> checks.																~ action(p,CHECK)
+<player:p> is standing by to enter the game.									~ standby(p)
+<player:p> sits in.																~ sitin(p)
+<player:p> raises to <amount:a>.												~ action(p,RAISE,a)
+Betting is now capped															~ maxbets()
+<player:p> shows <hand:h>.														~ showhand(p,h)
+<player:p> starts as dealer.													~ dealer(p)
+<player:p> wins pot <amount:a> with <hand:h>.									~ wins(p,h,a)
+<player:p> wins side pot <amount:a> with <hand:h>.								~ wins(p,h,a)
+<player:p> wins main pot <amount:a> with <hand:h>.								~ wins(p,h,a)
+<player:p> wins pot <amount:a>.													~ wins(p,a)
+<player:p> sits out.															~ sitout(p)
+------ Starting hand #<longnum:n> ------										~ newhand(n)
+Dealing pocket cards [<card:a>, <card:b>]										~ pocket(a,b)
+<player:p> bets <amount:a>.														~ action(p,BET,a)
+BOLD: <player>, you have all-in protection available.							~ ignore()
+BOLD: \<<nb_player:p>> <text:t>													~ chat(p,t)
+<player:p>, it's your turn to act! Please hurry up.								~ hurry(p)
+BOLD: Vote cast. <player> now has <number> abusive votes.						~ ignore()
+
+~~ hand
+<article:c> high								~ high(c)
+a pair of <plural:c>							~ pair(c)
+two pairs, <plural:a> and <plural:b>			~ twopair(a,b)
+two pairs <plural:a> and <plural:b>				~ twopair(a,b)
+three <plural:a>								~ set(a)
+a straight, <singular:c> high					~ straight(c)
+a straight <singular:c> high					~ straight(c)
+a straigh <singular:c> high						~ straight(c)
+a flush, <singular:c> high						~ flush(c)
+a flush <singular:c> high						~ flush(c)
+a fullhouse, <plural:s> full of <plural:p>		~ fullhouse(s,p)
+a fullhouse <plural:s> full of <plural:p>		~ fullhouse(s,p)
+four <plural:c>									~ four(c)
+a straight flush, <singular:c> high				~ sflush(c)
+a straight flush <singular:c> high				~ sflush(c)
+a royal flush									~ sflush(A)
+
+~~ article
+a two		~ 2
+a three		~ 3
+a four		~ 4
+a five		~ 5
+a six		~ 6
+a seven		~ 7
+a eight		~ 8
+an eight	~ 8
+a nine		~ 9
+a Ten		~ T
+a ten		~ T
+a Jack		~ J
+a Queen		~ Q
+a King		~ K
+a Ace		~ A
+an Ace		~ A
+
+~~plural
+twos		~ 2
+threes		~ 3
+fours		~ 4
+fives		~ 5
+sixes		~ 6
+sevens		~ 7
+eights		~ 8
+nines		~ 9
+Tens		~ T
+tens		~ T
+Jacks		~ J
+Queens		~ Q
+Kings		~ K
+Aces		~ A
+
+~~singular
+two			~ 2
+three		~ 3
+four		~ 4
+five		~ 5
+six			~ 6
+seven		~ 7
+eight		~ 8
+nine		~ 9
+Ten			~ T
+ten			~ t
+Jack		~ J
+Queen		~ Q
+King		~ K
+Ace			~ A
+
+~~passive_action
+check folded	~ CHECKFOLD
+check-folded	~ CHECKFOLD

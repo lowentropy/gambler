@@ -1,0 +1,17 @@
+// init:
+//	HAND1 = [4c, 6c, 9c, Ac, Kc]
+//	HAND2 = [3h, 5d, 7s, Ac, Kc]
+// expect:
+//	start
+//	A
+//	end
+
+FLUSH(H) := false
+	[_S, _S, _S, _S, _S] in H -> true
+
+print "start"
+FLUSH(HAND1) -> print "A"
+FLUSH(HAND2) -> print "B"
+print "end"
+
+exit

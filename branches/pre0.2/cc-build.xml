@@ -1,0 +1,9 @@
+<project name="gambler" default="cruise_control" basedir="checkout"> 
+	<target name="cruise_control"> 
+		<delete dir="gambler" /> 
+		<exec executable="svn">
+			<arg line="co https://esheep.ath.cx/svn/gambler/trunk/ gambler"/>
+		</exec>
+		<ant dir="gambler"  /> 
+	</target> 
+</project>

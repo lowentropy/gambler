@@ -1,0 +1,91 @@
+// init:
+//	P1 = [7s,8c], T1 = [9d,10h]
+//	P2 = [10s,Jc], T2 = [Qd,Kh]
+//	P3 = [10c,Jc], T3 = [Qc,Kc]
+//	P4 = [6c,7c], T4 = [9c,10c]
+// expect:
+//	start
+//	h1 is straight draw
+//	h2 is straight draw
+//	h3 is straight draw
+//	h4 is NOT straight draw
+//	h1 is NOT high
+//	h2 is high
+//	h3 is high
+//	h4 is NOT high
+//	h1 is NOT suited
+//	h2 is NOT suited
+//	h3 is suited
+//	h4 is NOT suited
+//	end
+
+ALWAYS := true
+
+CON(P,L,H) := false								// unsuited connectors, low=L, high=H
+	[L_, H_] in P -> false
+		H follows L	-> true
+
+CON_HIGH(P,L,H) := false						// unsuited connectors, low=L, high=H
+	[L_, H_] in P -> false
+		H follows L	-> false
+			L >= 10 -> true
+
+SCON_HIGH(P,L,H,S) := false						// suited connectors, low=L, high=H, suit=S
+	[LS, HS] in P -> false
+		H follows L -> false
+			L >= 10 -> true
+
+STRAIGHT_DRAW(P,T) := false						// open-ended straight draw
+	[C_, D_] in T & CON(P,L,H) -> false
+		C follows H -> false
+			D follows C -> true
+		L follows C -> false
+			C follows D -> true
+
+STRAIGHT_DRAW_HIGH(P,T) := false				// open-ended straight draw
+	[C_, D_] in T & CON_HIGH(P,L,H) -> false
+		C follows H -> false
+			D follows C -> true
+		L follows C -> false
+			C follows D -> true
+
+STRAIGHT_DRAW_SUITED(P,T) := false				// open-ended straight draw
+	[C_, D_] in T & SCON_HIGH(P,L,H,S) -> false
+		C follows H -> false
+			D follows C -> true
+		L follows C -> false
+			C follows D -> true
+
+
+print "start"
+
+
+ALWAYS -> print "h1 is NOT straight draw"
+	STRAIGHT_DRAW(P1,T1) -> print "h1 is straight draw"
+ALWAYS -> print "h2 is NOT straight draw"
+	STRAIGHT_DRAW(P2,T2) -> print "h2 is straight draw"
+ALWAYS -> print "h3 is NOT straight draw"
+	STRAIGHT_DRAW(P3,T3) -> print "h3 is straight draw"
+ALWAYS -> print "h4 is NOT straight draw"
+	STRAIGHT_DRAW(P4,T4) -> print "h4 is straight draw"
+
+ALWAYS -> print "h1 is NOT high"
+	STRAIGHT_DRAW_HIGH(P1,T1) -> print "h1 is high"
+ALWAYS -> print "h2 is NOT high"
+	STRAIGHT_DRAW_HIGH(P2,T2) -> print "h2 is high"
+ALWAYS -> print "h3 is NOT high"
+	STRAIGHT_DRAW_HIGH(P3,T3) -> print "h3 is high"
+ALWAYS -> print "h4 is NOT high"
+	STRAIGHT_DRAW_HIGH(P4,T4) -> print "h4 is high"
+
+ALWAYS -> print "h1 is NOT suited"
+	STRAIGHT_DRAW_SUITED(P1,T1) -> print "h1 is suited"
+ALWAYS -> print "h2 is NOT suited"
+	STRAIGHT_DRAW_SUITED(P2,T2) -> print "h2 is suited"
+ALWAYS -> print "h3 is NOT suited"
+	STRAIGHT_DRAW_SUITED(P3,T3) -> print "h3 is suited"
+ALWAYS -> print "h4 is NOT suited"
+	STRAIGHT_DRAW_SUITED(P4,T4) -> print "h4 is suited"
+	
+print "end"
+exit

@@ -1,0 +1,18 @@
+snoop: true
+show_ai_types: true
+user: lowentropy
+show_suggest: true
+limit: $1
+table_bias_disc: loose
+pass: lowentropy
+num_lp_opp: 0
+use_cont_table_bias: false
+bankroll: $1000
+player_style: 1.0, 0.0, 0.0
+num_smart_opp: 9
+show_odds: true
+ai_bias: 0.47
+table_bias_cont: 0.46
+show_outs: true
+num_la_opp: 0
+all_show_down: true

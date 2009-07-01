@@ -1,0 +1,17 @@
+// init:
+//	HAND1 = [Ac, As, Jh, Jd, Jc]
+//	HAND2 = [Ac, As, Jh, Jd, Kc]
+// expect:
+//	start
+//	A
+//	end
+
+BOAT(H) := false								// full house
+	[N_, N_, M_, M_, M_] in H -> true
+
+print "start"
+BOAT(HAND1) -> print "A"
+BOAT(HAND2) -> print "B"
+print "end"
+
+exit

@@ -1,0 +1,217 @@
+New OCR Algorithm Ideas
+20060422:0500
+
+Stages:
+	1. Shape Detection
+		1.a Feature Detection
+		1.b Property Detection
+	2. Character Creation
+		2.a Induction
+		2.b Rule Formation
+		2.c Font Learning
+	3. OCR
+		3.a Glyph Extraction
+		3.b Global Matching
+		3.c Font Selection
+		3.d Character Extraction
+		3.e Font Updating
+		3.f New Characters
+
+Details:
+
+	1.a Feature Detection
+
+		I) Line Shapes
+			 
+			1.  O  : loop
+			2.  _
+			   |   : knot OR serif
+
+			3. |-  : 2 lines intersecting with truncation OR serif
+			
+			4.  +  : two lines intersecting, no truncation
+
+			5. |/  : two lines intersecting with merge OR serif
+			   |
+
+			6. ||  : double-line or two lines
+
+		II) Construction Rules
+
+			- Use constraint propagation to extract set
+			  of lines, and use shapes to determine sets of
+			  possible features like knots and serifs.
+			- A loop disconnects its adjoining lines. For
+			  instance, shape 1 overrides shape 2 or 5 in the
+			  character '6'.
+			- Run constraint propagation beyond first solution
+			  to obtain tree of possible configurations
+	
+	1.b Property Detection
+
+		- Horizontal/Vertical
+		- Straight/Curved
+		- Open-curve Direction
+		- Knots
+		- Segments
+		- Relative Feature Position
+		- Serifs
+		- Symmetry (X/Y)
+		- Thickness
+		- Relative Character Position
+		- Relative Character Size
+	
+	2.a Induction
+
+		1. Completion:  Given rule/feature-s A and B, if either A or
+		                B is always present but never both, form a
+					    rule "A | B" and a combined feature "AB".
+		2. Implication: If rule/feature A never appears without B,
+		                form the rule "A -> B"
+		3. Requirement: If a feature or property X is always present,
+		                make it into a rule "X".
+		4. Deduction:   If logical rules A and B exist and can be
+		                combined with graphical logic into C, form the
+						rule C where "A,B -> C".
+			Examples: i)   line L_1 w/ no ends -> space S_1 with
+							O({L_1},S_1)
+					  ii)  lines L_1, L_2 with 2 intersections
+					  		-> space S_1 with O({L_1,L_2},S_1)
+					  iii) L_1,L_2 forms S_1 AND L_1 curve opens DOWN
+					  		-> O_top(L_1,S_1) AND O_bottom(L_2,S_2)
+								... etc for opens UP, LEFT, RIGHT
+					  iv)  L_i intersects {L_n} in two places where
+					  		O({L_n},S_i) -> O({L_i,..},{S_1,S_2}) where
+							(S_1 V S_2 = S_i) AND (S_1 ^ S_2 = null)
+					  v)   horiz line L_1 with two int.s I1, I2
+					  		-> I1 and I2 are horiz-level
+		5. Comparison:  If a relationship R exists between features
+		                A and B, form the rule "R(A,B)".
+		6. Dependency:  If there is a rule R which are formed from
+		                features conditional on all rules in set S,
+						never consider R when any Q in S is unmatched.
+		(7) Differentiation
+	
+	2.b Rule Formation
+
+		I	extract shapes and features from a wide array
+			of fonts showing the same glyph
+
+		II  use induction rule 3 on any properties found on
+			independent sets of these features
+			
+		III	find minimum class of sets in &/| groups which
+			have well-fit rules (using a fitness comination
+			operator), and where the OR operators usually
+			produce a shared feature.
+	
+		IV	find and differentiate similar characters with
+			differentiation rules
+	
+	2.c Font Learning
+
+		Character rules are universal to all fonts, as are
+		differentiation rules. The set of rules which form the
+		final set for a character are linked to a normalized
+		probability density giving the importance of each rule
+		for matching that character. Once the universal ruleset
+		is found for a character, each fonts' extracted features
+		are compared to the set to determine the importance,
+		*in that font*, of each rule for detecting the character.
+		The unversal density is the average of all known fonts.
+	
+	3.a Glyph Extraction
+
+		Existing OCR technique of outline/extraction is used to
+		find potential glyphs. Each of these then is passed through
+		the shape extraction algorithm. As passed to the next step,
+		the algorithm is an A* search by passing different sets of
+		relatively local glyphs (since some characters are multi-glyph
+		OR may form ligatures).
+
+	3.b Global Matching
+
+		Properties are extracted from the features of the glyph(s)
+		and compared to each character's input rules. The most
+		likely matches within a threshold are passed back to the
+		search algorithm.
+
+	3.c Font Selection
+
+		Once a small set of characters is known (especially when
+		confirmed from context or a dictionary), the combination of
+		extracted features and known ruleset are used as in step
+		2.c to create a propability distribution, which is compared
+		to the distributions of all known fonts. Top font matches
+		(within a tolerance) are then passed to the next step.
+	
+	3.d	Character Extraction
+
+		The given fonts' probability distributions are averaged to
+		get a new distribution, which replaces the global distribution
+		for the current region of characters. The scan then repeats
+		from the start using this new distribution. After an
+		exponentially greater confirmation from context is recieved,
+		step 3.c can be repeated to narrow the fontset (optional).
+		A final small (usually single-element if the glyph's font
+		really IS known and enough characters are given) set of
+		fonts' distribution is used to scan and decode all the
+		characters in the region.
+
+		Note that phonetic rules, dictionary lookups and other context
+		provides a heuristic overlayed on the rule-matching heuristic
+		in the A* search which comprises the algorithm. The heurisics
+		are layered like this:
+
+				   CONTEXT
+				      |
+				      v
+				RULE-MATCHING
+				      |
+					  V
+			   DIFFERENTIATION
+
+		If the font has been determined, but the extracted character
+		has not been learned by the font, the extracted features
+		(which have already been conditioned by the universal min-set
+		rules for that character) are added as-is to the font, and
+		additional differentiation can be added at that point.
+
+	3.f Characters which have a low match score may be character glyphs
+		or they may be crud. Separate graphical rules can be created to
+		detect likely crud, but the rest should be flagged for the user.
+		All the user has to do is say which character is represented
+		(the glyph should be stored with surrounding pixel state in case
+		it is a ligand) and control should pass to step 1.a.
+		
+Example:
+	
+	The letter A
+
+		(ideal) (skew) (deco) (curvy) (stylized) (serifs)
+
+		Shape features: 2 lines, 1 space, 2 intersections
+
+			Id		I.Rule	Description (+ indicates low match rate)
+		
+		Line 1:
+			L1.1	r3		v-symmetric
+			L1.2	r1		(knot OR curvy) around MID => feature K,
+							splitting L1 into segments S11 and S12
+			L1.3	r3		+ h-serifs at both ends
+			L1.4	r3		open down
+		Seg 11:
+			S11.1	r3		straight
+		Seg 12:
+			S12.1	r3		straight
+		Line 2:
+			L2.1	r3		horizontal
+			L2.2	r3		straight
+		Int L1/L2:
+			L1L2.1	r4		2 int.s implies space Sp1
+			L1L2.2	r5(6)	feature k -> int.1 < k & int.2 > k
+			L1L2.3	r3		line 1 truncates line 2
+			L1L2.4	r4		int.s are horiz-level
+		Space:
+			Sp.1	r4		L1L2.1, L1.4 -> top of space is L1,
+							bottom of space is L2

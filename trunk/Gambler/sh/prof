@@ -1,0 +1,3 @@
+#! /bin/bash
+
+`cat ../sh/java-path` -classpath bin:../bayes/bin poker.util.PrintProfile $*
